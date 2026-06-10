@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from .models import (
     Person,
     Party,
@@ -25,6 +24,11 @@ class PersonAdmin(admin.ModelAdmin):
         PartyMembershipInline,
         PersonSourceInline
     ]
+
+    # 🔥 KLUCZOWA POPRAWKA
+    def save_model(self, request, obj, form, change):
+        obj.save()  # zapisuje Person PIERWSZY
+        form.save_m2m()  # potem relacje many-to-many (bez crasha)
 
 
 @admin.register(Party)
