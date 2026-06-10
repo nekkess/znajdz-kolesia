@@ -28,9 +28,7 @@ class Person(models.Model):
     last_name = models.CharField(max_length=100)
 
     position = models.CharField(max_length=255, blank=True)
-
     organization = models.CharField(max_length=255, blank=True)
-
     city = models.CharField(max_length=100, blank=True)
 
     voivodeship = models.CharField(
@@ -65,7 +63,6 @@ class Person(models.Model):
 
     photo = CloudinaryField('image', blank=True, null=True)
 
-
     description = models.TextField(
         blank=True,
         verbose_name="Opis działalności"
@@ -79,14 +76,18 @@ class Person(models.Model):
 
     def save(self, *args, **kwargs):
 
-        if self.city:
+        is_new = self.pk is None
+
+        super().save(*args, **kwargs)
+
+        # geocoding ONLY after first save
+        if is_new and self.city:
 
             try:
                 geolocator = Nominatim(user_agent="zlodziejpl")
 
                 location = geolocator.geocode(
                     f"{self.city}, Polska",
-                    addressdetails=True,
                     timeout=10
                 )
 
@@ -119,10 +120,10 @@ class Person(models.Model):
                     if state in mapping:
                         self.voivodeship = mapping[state]
 
+                    super().save(update_fields=["latitude", "longitude", "voivodeship"])
+
             except Exception:
                 pass
-
-        super().save(*args, **kwargs)
 
     @property
     def salary_display(self):
@@ -153,10 +154,8 @@ class Person(models.Model):
     @property
     def approval_percent(self):
         total = self.upvotes + self.downvotes
-
         if total == 0:
             return 0
-
         return round(self.upvotes * 100 / total)
 
     def __str__(self):
@@ -194,11 +193,9 @@ class PartyMembership(models.Model):
     party = models.ForeignKey(Party, on_delete=models.CASCADE)
 
     start_year = models.IntegerField()
-
     end_year = models.IntegerField(null=True, blank=True)
 
     position = models.CharField(max_length=255, blank=True)
-
     description = models.TextField(blank=True)
 
     class Meta:
