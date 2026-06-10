@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'osoby',
 
     'cloudinary',
+    'cloudinary_storage',
 ]
 
 # CLOUDINARY CONFIG (ważne)
@@ -38,6 +39,8 @@ cloudinary.config(
     api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
     secure=True
 )
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
