@@ -30,8 +30,10 @@ urlpatterns = [
     "ranking-uzytkownikow/",
     ranking_users),
     path(
-    "rejestracja/",
-    register),
+        "rejestracja/",
+        register,
+        name="rejestracja"
+    ),
     path(
     "logowanie/",
     login_view),
@@ -48,6 +50,7 @@ path(
     "wylogowanie/",
     logout_view
 ),
+
 
 
 

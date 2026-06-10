@@ -6,40 +6,179 @@ Kontakt
 
 {% block content %}
 
-<div class="container mt-5">
+<style>
 
-    <h1 class="mb-4">
+.contact-hero{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.contact-hero h1{
+    font-size:3rem;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.contact-hero p{
+    font-size:1.2rem;
+    color:#6c757d;
+    max-width:800px;
+    margin:auto;
+}
+
+.contact-card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    transition:.25s;
+    height:100%;
+}
+
+.contact-card:hover{
+    transform:translateY(-5px);
+}
+
+.contact-icon{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.contact-email{
+    font-size:1.2rem;
+    font-weight:700;
+    color:#e10600;
+    text-decoration:none;
+}
+
+.contact-email:hover{
+    color:#b30000;
+}
+
+.fade-line{
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeUp .8s forwards;
+}
+
+.fade-line:nth-child(1){
+    animation-delay:.2s;
+}
+
+.fade-line:nth-child(2){
+    animation-delay:.5s;
+}
+
+.fade-line:nth-child(3){
+    animation-delay:.8s;
+}
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+</style>
+
+<div class="container py-5">
+
+<div class="contact-hero fade-line">
+
+    <h1>
         📧 Kontakt
     </h1>
 
     <p>
-        Masz pytanie, znalazłeś błąd lub chcesz zgłosić aktualizację danych?
+        Masz pytanie, znalazłeś błąd, chcesz zgłosić nową osobę
+        lub poprawić dane znajdujące się w serwisie?
+        Skontaktuj się z nami.
     </p>
 
-    <div class="card p-4 mt-4">
+</div>
 
-        <h4>
-            Kontakt e-mail
-        </h4>
+<div class="row g-4">
 
-        <p>
-            kontakt@trackerkolesiostwa.pl
-        </p>
+    <div class="col-md-6 fade-line">
+
+        <div class="card contact-card p-4 text-center">
+
+            <div class="contact-icon">
+                📩
+            </div>
+
+            <h3>
+                Kontakt główny
+            </h3>
+
+            <p class="text-muted">
+                Pytania, zgłoszenia błędów, propozycje zmian.
+            </p>
+
+            <a
+                href="mailto:znajdzkolesia@gmail.com"
+                class="contact-email">
+
+                znajdzkolesia@gmail.com
+
+            </a>
+
+        </div>
 
     </div>
 
-    <div class="card p-4 mt-4">
+    <div class="col-md-6 fade-line">
 
-        <h4>
-            Współpraca i media
-        </h4>
+        <div class="card contact-card p-4 text-center">
 
-        <p>
-            media@trackerkolesiostwa.pl
-        </p>
+            <div class="contact-icon">
+                🕵️
+            </div>
+
+            <h3>
+                Zgłoś osobę
+            </h3>
+
+            <p class="text-muted">
+                Wiesz o osobie publicznej, której brakuje w bazie?
+                Wyślij informacje wraz ze źródłami.
+            </p>
+
+            <a
+                href="mailto:znajdzkolesia@gmail.com?subject=Zgłoszenie osoby"
+                class="contact-email">
+
+                Wyślij zgłoszenie
+
+            </a>
+
+        </div>
 
     </div>
 
+</div>
+
+<div class="card border-0 shadow-sm mt-5 p-4 fade-line">
+
+    <h4 class="mb-3">
+        ℹ️ Informacja
+    </h4>
+
+    <p class="mb-0">
+        Projekt <strong>Znajdź Kolesia</strong> opiera się wyłącznie
+        na publicznie dostępnych źródłach informacji.
+        Jeśli zauważysz nieaktualne lub nieprawidłowe dane,
+        daj nam znać — postaramy się je zweryfikować i poprawić.
+    </p>
+
+</div>
 </div>
 
 {% endblock %}

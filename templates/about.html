@@ -6,56 +6,190 @@ O projekcie
 
 {% block content %}
 
-<div class="container mt-5">
+<style>
 
-    <h1 class="mb-4">
+.about-hero{
+    text-align:center;
+    margin-bottom:60px;
+}
+
+.about-hero h1{
+    font-size:3rem;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.about-hero p{
+    font-size:1.2rem;
+    color:#6c757d;
+    max-width:900px;
+    margin:auto;
+}
+
+.about-card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    transition:.25s;
+    height:100%;
+}
+
+.about-card:hover{
+    transform:translateY(-5px);
+}
+
+.about-icon{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.fade-line{
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeUp .8s forwards;
+}
+
+.fade-line:nth-child(1){
+    animation-delay:.2s;
+}
+
+.fade-line:nth-child(2){
+    animation-delay:.5s;
+}
+
+.fade-line:nth-child(3){
+    animation-delay:.8s;
+}
+
+.fade-line:nth-child(4){
+    animation-delay:1.1s;
+}
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+</style>
+
+<div class="container py-5">
+
+<div class="about-hero fade-line">
+
+    <h1>
         ℹ️ O projekcie
     </h1>
 
-    <p class="lead">
-        Tracker Kolesiostwa to niezależny projekt obywatelski
-        monitorujący osoby pełniące funkcje publiczne,
-        ich kariery zawodowe oraz powiązania instytucjonalne.
+    <p>
+        Znajdź Kolesia to niezależny projekt obywatelski,
+        którego celem jest zwiększenie przejrzystości życia publicznego
+        poprzez gromadzenie i porządkowanie informacji o osobach
+        pełniących funkcje publiczne.
     </p>
 
-    <hr>
+</div>
 
-    <h3>
-        Nasza misja
-    </h3>
+<div class="row g-4">
+
+    <div class="col-md-4 fade-line">
+
+        <div class="card about-card p-4 text-center">
+
+            <div class="about-icon">
+                🎯
+            </div>
+
+            <h3>
+                Misja
+            </h3>
+
+            <p>
+                Ułatwienie obywatelom dostępu do informacji,
+                które często są rozproszone pomiędzy wieloma
+                urzędami, instytucjami i dokumentami.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4 fade-line">
+
+        <div class="card about-card p-4 text-center">
+
+            <div class="about-icon">
+                📚
+            </div>
+
+            <h3>
+                Źródła danych
+            </h3>
+
+            <p>
+                Korzystamy wyłącznie z publicznie dostępnych źródeł,
+                takich jak BIP, strony urzędów, rejestry publiczne,
+                oświadczenia majątkowe i oficjalne komunikaty.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4 fade-line">
+
+        <div class="card about-card p-4 text-center">
+
+            <div class="about-icon">
+                🛡️
+            </div>
+
+            <h3>
+                Niezależność
+            </h3>
+
+            <p>
+                Projekt nie jest powiązany z żadną partią polityczną,
+                organizacją społeczną ani instytucją państwową.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="card border-0 shadow-sm mt-5 p-5 fade-line">
+
+    <h2 class="mb-4">
+        Kto stoi za projektem?
+    </h2>
 
     <p>
-        Celem projektu jest zwiększenie przejrzystości życia publicznego
-        oraz ułatwienie obywatelom dostępu do informacji,
-        które często są rozproszone pomiędzy wieloma instytucjami.
+        Znajdź Kolesia został stworzony i jest rozwijany przez jedną osobę.
+        Projekt powstał z przekonania, że dostęp do informacji publicznych
+        powinien być prostszy i bardziej przejrzysty dla każdego obywatela.
     </p>
-
-    <h3>
-        Źródła danych
-    </h3>
 
     <p>
-        Korzystamy wyłącznie z publicznie dostępnych źródeł:
+        Serwis jest stale rozwijany, jednak ze względu na ograniczone zasoby
+        niektóre aktualizacje mogą pojawiać się z opóźnieniem.
     </p>
 
-    <ul>
-        <li>Biuletyn Informacji Publicznej</li>
-        <li>strony urzędów i instytucji</li>
-        <li>oświadczenia majątkowe</li>
-        <li>rejestry publiczne</li>
-        <li>oficjalne komunikaty</li>
-    </ul>
-
-    <h3>
-        Niezależność
-    </h3>
-
-    <p>
-        Projekt nie jest powiązany z żadną partią polityczną,
-        organizacją społeczną ani instytucją państwową.
-        Jestem jednym studentem. Wymyśliłem i stworzyłem Znajdź Kolesia sam.
-        Nienawidzę komputerów i one mnie też. Dlatego temo aktualizacji jest niskie.
+    <p class="mb-0">
+        Jeśli zauważysz błędy, nieaktualne dane lub masz pomysł na rozwój
+        projektu — skontaktuj się z nami. Każda pomoc jest mile widziana.
     </p>
+
+</div>
 
 </div>
 

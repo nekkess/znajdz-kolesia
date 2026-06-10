@@ -32,6 +32,8 @@ class Person(models.Model):
         blank=True
     )
 
+
+
     organization = models.CharField(
         max_length=255,
         blank=True
@@ -45,6 +47,16 @@ class Person(models.Model):
     voivodeship = models.CharField(
         max_length=50,
         choices=VOIVODESHIPS,
+        blank=True
+    )
+
+    latitude = models.FloatField(
+        null=True,
+        blank=True
+    )
+
+    longitude = models.FloatField(
+        null=True,
         blank=True
     )
 
@@ -75,49 +87,72 @@ class Person(models.Model):
         blank=True
     )
 
-    source_title = models.CharField(
-        max_length=255,
-        blank=True
-    )
-
-    source_url = models.URLField(
-        blank=True
-    )
 
     description = models.TextField(
         blank=True
     )
 
-    latitude = models.FloatField(
-        null=True,
-        blank=True
+    party = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="Partia"
     )
 
-    longitude = models.FloatField(
-        null=True,
-        blank=True
+    description = models.TextField(
+        blank=True,
+        verbose_name="Opis działalności"
     )
 
     def save(self, *args, **kwargs):
 
-        if self.city and (
-                not self.latitude or
-                not self.longitude
-        ):
+        if self.city:
 
             geolocator = Nominatim(
                 user_agent="zlodziejpl"
             )
 
             location = geolocator.geocode(
-                self.city + ", Polska"
+                f"{self.city}, Polska",
+                addressdetails=True
             )
 
             if location:
+
                 self.latitude = location.latitude
                 self.longitude = location.longitude
 
+                address = location.raw.get(
+                    "address",
+                    {}
+                )
+
+                state = address.get("state", "")
+
+                mapping = {
+                    "Województwo dolnośląskie": "dolnoslaskie",
+                    "Województwo kujawsko-pomorskie": "kujawsko_pomorskie",
+                    "Województwo lubelskie": "lubelskie",
+                    "Województwo lubuskie": "lubuskie",
+                    "Województwo łódzkie": "lodzkie",
+                    "Województwo małopolskie": "malopolskie",
+                    "Województwo mazowieckie": "mazowieckie",
+                    "Województwo opolskie": "opolskie",
+                    "Województwo podkarpackie": "podkarpackie",
+                    "Województwo podlaskie": "podlaskie",
+                    "Województwo pomorskie": "pomorskie",
+                    "Województwo śląskie": "slaskie",
+                    "Województwo świętokrzyskie": "swietokrzyskie",
+                    "Województwo warmińsko-mazurskie": "warminsko_mazurskie",
+                    "Województwo wielkopolskie": "wielkopolskie",
+                    "Województwo zachodniopomorskie": "zachodniopomorskie",
+                }
+
+                if state in mapping:
+                    self.voivodeship = mapping[state]
+
         super().save(*args, **kwargs)
+
+
 
     @property
     def salary_display(self):
@@ -202,8 +237,13 @@ class PartyMembership(models.Model):
         blank=True
     )
 
+
     position = models.CharField(
-        max_length=255,
+    max_length=255,
+    blank=True
+    )
+
+    description = models.TextField(
         blank=True
     )
 

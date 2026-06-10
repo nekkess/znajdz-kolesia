@@ -38,6 +38,7 @@ Mapa Kolesi
     width: 100%;
     height: 250px;
     object-fit: cover;
+    object-position: center 25%;
     border-radius: 10px;
 }
 
@@ -242,8 +243,6 @@ marker{{ person.id }}.on('click', function() {
     <span class="badge rounded-pill bg-danger">
         {{ person.current_party }}
     </span>
-
-
                 <div class="mb-2">
                     💼 {{ person.position }}
                 </div>
@@ -352,28 +351,51 @@ document
 
 }
 
+
+
 window.vote = function(personId, value) {
 
     fetch(`/vote/${personId}/${value}/`)
-    .then(response => response.json())
+    .then(response => {
+
+        if (response.status === 403) {
+
+            alert(
+                "Musisz się zalogować, aby głosować."
+            );
+
+            window.location.href = "/logowanie/";
+
+            return null;
+        }
+
+        return response.json();
+
+    })
     .then(data => {
 
-        document.getElementById("upvotes").innerText =
+        console.log("DATA =", data);
+
+        if (!data) return;
+
+        document.getElementById("upvotes").textContent =
             data.upvotes;
 
-        document.getElementById("downvotes").innerText =
+        document.getElementById("downvotes").textContent =
             data.downvotes;
 
-        document.getElementById("approval").innerText =
+        document.getElementById("approval").textContent =
             data.approval + "% poparcia";
 
         document.getElementById("vote-message").style.display =
             "block";
 
-
+    })
+    .catch(error => {
+        console.log(error);
     });
 
-}
+};
 
 
 </script>

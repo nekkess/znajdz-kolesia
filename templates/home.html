@@ -25,11 +25,6 @@ Tracker Kolesiostwa
     background:#e10600;
     border:none;
 }
-.navbar-nav .nav-link{
-    color:white !important;
-    font-size:1.3rem;
-    font-weight:700;
-}
 
 .navbar .container{
     display:flex;
@@ -43,16 +38,8 @@ Tracker Kolesiostwa
     opacity:.9;
 }
 
-.site-logo {
-    height: 80px;
-    width: auto;
-}
 
-.navbar-custom .container {
-    min-height: 90px;
-    display: flex;
-    align-items: center;
-}
+
 
        .hero {
     height: 100vh;
@@ -163,6 +150,7 @@ url("/static/images/sejm-sala-plenarna.jpeg");
     width: 100%;
     height: 320px;
     object-fit: cover;
+    object-position: center top;
 }
 
         .section-title {
@@ -188,11 +176,7 @@ url("/static/images/sejm-sala-plenarna.jpeg");
     background: #A00000;
     border: none;
 }
-        .navbar-nav .nav-link{
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-left: 25px;
-}
+
 
 .hero .btn-light{
     border-radius:16px;
@@ -559,50 +543,47 @@ function openPersonModal(personId) {
 {% include "components/person_modal.html" %}
 
 <script>
-
 window.vote = function(personId, value) {
 
     fetch(`/vote/${personId}/${value}/`)
-    .then(response => response.json())
+    .then(response => {
+
+        if (response.status === 403) {
+
+            alert(
+                "Musisz się zalogować, aby głosować."
+            );
+
+            window.location.href = "/logowanie/";
+
+            return null;
+        }
+
+        return response.json();
+
+    })
     .then(data => {
 
-        document.getElementById("upvotes").innerText =
+        if (!data) return;
+
+        document.getElementById("upvotes").textContent =
             data.upvotes;
 
-        document.getElementById("downvotes").innerText =
+        document.getElementById("downvotes").textContent =
             data.downvotes;
 
-        document.getElementById("approval").innerText =
+        document.getElementById("approval").textContent =
             data.approval + "% poparcia";
 
         document.getElementById("vote-message").style.display =
             "block";
 
-        if (value == 1) {
-
-            document
-                .getElementById("upvote-btn")
-                .classList.add("btn-dark");
-
-            document
-                .getElementById("downvote-btn")
-                .classList.remove("btn-dark");
-
-        } else {
-
-            document
-                .getElementById("downvote-btn")
-                .classList.add("btn-dark");
-
-            document
-                .getElementById("upvote-btn")
-                .classList.remove("btn-dark");
-
-        }
-
+    })
+    .catch(error => {
+        console.log(error);
     });
 
-}
+};
 
 </script>
 

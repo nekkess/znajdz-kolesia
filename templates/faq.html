@@ -6,78 +6,284 @@ FAQ
 
 {% block content %}
 
-<div class="container mt-5">
+<style>
 
-    <h1 class="mb-5">
+.faq-hero{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.faq-hero h1{
+    font-size:3rem;
+    font-weight:800;
+}
+
+.faq-hero p{
+    color:#6c757d;
+    font-size:1.1rem;
+    max-width:700px;
+    margin:auto;
+}
+
+.accordion-item{
+    border:none;
+    border-radius:16px !important;
+    overflow:hidden;
+    margin-bottom:15px;
+    box-shadow:0 6px 20px rgba(0,0,0,.08);
+}
+
+.accordion-button{
+    font-weight:700;
+    font-size:1.1rem;
+    padding:22px;
+}
+
+.accordion-button:not(.collapsed){
+    background:#fff5f5;
+    color:#c00000;
+    box-shadow:none;
+}
+
+.accordion-button:focus{
+    box-shadow:none;
+}
+
+.accordion-body{
+    font-size:1rem;
+    line-height:1.7;
+    color:#444;
+}
+
+.faq-card{
+    background:white;
+    padding:40px;
+    border-radius:24px;
+    box-shadow:0 10px 40px rgba(0,0,0,.08);
+}
+
+</style>
+
+<div class="container py-5">
+
+<div class="faq-hero">
+
+    <h1>
         ❓ FAQ
     </h1>
 
-    <div class="mb-4">
+    <p>
+        Najczęściej zadawane pytania dotyczące projektu Znajdź Kolesia.
+    </p>
 
-        <h4>
-            Czym jest Tracker Kolesiostwa?
-        </h4>
+</div>
 
-        <p>
-            Tracker Kolesiostwa to niezależny projekt obywatelski
-            monitorujący osoby pełniące funkcje publiczne oraz ich
-            powiązania zawodowe i polityczne.
-        </p>
+<div class="faq-card">
+
+    <div class="accordion" id="faqAccordion">
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+
+                <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq1">
+
+                    Czym jest Znajdź Kolesia?
+
+                </button>
+
+            </h2>
+
+            <div
+                id="faq1"
+                class="accordion-collapse collapse show"
+                data-bs-parent="#faqAccordion">
+
+                <div class="accordion-body">
+
+                    Znajdź Kolesia to niezależny projekt obywatelski
+                    monitorujący osoby pełniące funkcje publiczne,
+                    ich kariery zawodowe, powiązania polityczne oraz
+                    wynagrodzenia finansowane ze środków publicznych.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+
+                <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq2">
+
+                    Skąd pochodzą dane?
+
+                </button>
+
+            </h2>
+
+            <div
+                id="faq2"
+                class="accordion-collapse collapse"
+                data-bs-parent="#faqAccordion">
+
+                <div class="accordion-body">
+
+                    Dane pochodzą wyłącznie z publicznie dostępnych źródeł,
+                    takich jak Biuletyn Informacji Publicznej, strony urzędów,
+                    oświadczenia majątkowe, raporty, sprawozdania oraz
+                    oficjalne komunikaty instytucji publicznych.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+
+                <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq3">
+
+                    Czy mogę zgłosić błąd?
+
+                </button>
+
+            </h2>
+
+            <div
+                id="faq3"
+                class="accordion-collapse collapse"
+                data-bs-parent="#faqAccordion">
+
+                <div class="accordion-body">
+
+                    Tak. Jeśli zauważysz nieaktualne informacje,
+                    błędne dane lub brakujące źródła, skontaktuj się
+                    z nami przez formularz kontaktowy.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+
+                <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq4">
+
+                    Czy mogę zgłosić nową osobę?
+
+                </button>
+
+            </h2>
+
+            <div
+                id="faq4"
+                class="accordion-collapse collapse"
+                data-bs-parent="#faqAccordion">
+
+                <div class="accordion-body">
+
+                    Tak. W kolejnych wersjach serwisu użytkownicy będą mogli
+                    zgłaszać nowe osoby oraz dodawać źródła po zalogowaniu.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+
+                <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq5">
+
+                    Czy projekt jest związany z jakąś partią?
+
+                </button>
+
+            </h2>
+
+            <div
+                id="faq5"
+                class="accordion-collapse collapse"
+                data-bs-parent="#faqAccordion">
+
+                <div class="accordion-body">
+
+                    Nie. Projekt jest całkowicie niezależny
+                    i nie jest powiązany z żadną partią polityczną,
+                    organizacją ani instytucją państwową.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="accordion-item">
+
+            <h2 class="accordion-header">
+
+                <button
+                    class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#faq6">
+
+                    Czy mogę wesprzeć projekt?
+
+                </button>
+
+            </h2>
+
+            <div
+                id="faq6"
+                class="accordion-collapse collapse"
+                data-bs-parent="#faqAccordion">
+
+                <div class="accordion-body">
+
+                    Tak. Projekt rozwijany jest społecznie.
+                    Możesz wesprzeć utrzymanie serwera oraz dalszy rozwój
+                    poprzez stronę „❤️ Wspieraj projekt”.
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-    <div class="mb-4">
-
-        <h4>
-            Skąd pochodzą dane?
-        </h4>
-
-        <p>
-            Dane pochodzą wyłącznie z publicznie dostępnych źródeł,
-            takich jak strony urzędów, Biuletyn Informacji Publicznej,
-            sprawozdania, oświadczenia majątkowe i oficjalne komunikaty.
-        </p>
-
-    </div>
-
-    <div class="mb-4">
-
-        <h4>
-            Czy mogę zgłosić błąd?
-        </h4>
-
-        <p>
-            Tak. Jeśli zauważysz nieaktualne lub nieprawidłowe informacje,
-            skontaktuj się z nami lub użyj formularza zgłoszeniowego.
-        </p>
-
-    </div>
-
-    <div class="mb-4">
-
-        <h4>
-            Czy mogę zgłosić nową osobę?
-        </h4>
-
-        <p>
-            Tak. W przyszłości użytkownicy będą mogli dodawać nowe osoby
-            i źródła informacji po założeniu konta.
-        </p>
-
-    </div>
-
-    <div class="mb-4">
-
-        <h4>
-            Czy projekt jest powiązany z partiami politycznymi?
-        </h4>
-
-        <p>
-            Nie. Projekt jest inicjatywą niezależną i nie jest związany
-            z żadną partią polityczną, organizacją ani instytucją państwową.
-        </p>
-
-    </div>
+</div>
 
 </div>
 

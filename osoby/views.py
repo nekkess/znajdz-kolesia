@@ -81,11 +81,20 @@ def home(request):
     elif sort == "za":
 
         people = people.order_by("-last_name", "-first_name")
-    salary_sum = (
-                     Person.objects
-                     .exclude(annual_salary__isnull=True)
-                     .aggregate(total=Sum("annual_salary"))
-                 )["total"] or 0
+    salary_sum = Person.objects.annotate(
+        effective_salary=Coalesce(
+            "annual_salary",
+            ExpressionWrapper(
+                (F("salary_min") + F("salary_max")) / Value(2),
+                output_field=DecimalField(
+                    max_digits=15,
+                    decimal_places=2
+                )
+            )
+        )
+    ).aggregate(
+        total=Sum("effective_salary")
+    )["total"] or 0
 
     return render(
         request,
@@ -279,9 +288,15 @@ def support(request):
         request,
         "support.html"
     )
-
-@login_required
 def vote_person(request, person_id, vote):
+
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {
+                "error": "login_required"
+            },
+            status=403
+        )
 
     vote = int(vote)
 

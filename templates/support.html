@@ -1,33 +1,108 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Wspieraj Projekt
+Wesprzyj projekt
 {% endblock %}
 
 {% block content %}
 
-<div class="container mt-5">
+<style>
+    .fade-line{
+    opacity:0;
+    transform:translateY(15px);
+    animation:fadeUp .8s forwards;
+}
 
-    <h1 class="mb-4">
-        ☕ Wspieraj Projekt
-    </h1>
+.fade-line:nth-child(1){
+    animation-delay:0.3s;
+}
 
-    <p class="lead">
-        Tracker Kolesiostwa jest tworzony i utrzymywany społecznie.
+.fade-line:nth-child(2){
+    animation-delay:1.5s;
+}
+
+.fade-line:nth-child(3){
+    animation-delay:2.7s;
+}
+
+.fade-line:nth-child(4){
+    animation-delay:3.9s;
+}
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+
+</style>
+
+
+
+<div class="container py-5">
+
+    <div class="text-center mb-5">
+
+        <h1>☕ Wesprzyj Znajdź Kolesia</h1>
+
+        <div class="lead mt-3 text-center">
+
+    <p class="fade-line">
+        Projekt rozwijany jest społecznie.
     </p>
 
-    <p>
-        Utrzymanie serwera, rozwój nowych funkcji, gromadzenie danych
-        oraz moderacja zgłoszeń wymagają czasu i środków.
+    <p class="fade-line">
+        To znaczy, że nikt nie daje mi kasy.
     </p>
 
-    <p>
-        Jeśli uważasz projekt za wartościowy, w przyszłości będziesz mógł
-        wesprzeć jego rozwój.
+    <p class="fade-line">
+        Możesz kupić mi kawę i pierogi,
+        żebym programował przez kolejne 8 godzin.
     </p>
 
-    <div class="alert alert-warning mt-4">
-        System wsparcia zostanie uruchomiony wkrótce.
+    <p class="fade-line">
+        Jeśli uważasz projekt za wartościowy,
+        możesz pomóc w utrzymaniu serwera i dalszym rozwoju.
+    </p>
+
+</div>
+
+    </div>
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body text-center p-5">
+
+            <h3 class="mb-4">
+                ❤️ Wspieraj projekt
+            </h3>
+
+            <p class="mb-4">
+                Każde wsparcie pomaga rozwijać bazę danych,
+                dodawać nowe funkcje i utrzymywać stronę online.
+            </p>
+
+            <a
+                href="https://buymeacoffee.com/znajdzkolesia?new=1"
+                target="_blank"
+                class="btn btn-danger btn-lg">
+
+                Wesprzyj projekt
+
+            </a>
+
+        </div>
+
     </div>
 
 </div>

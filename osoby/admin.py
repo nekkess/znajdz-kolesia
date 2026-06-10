@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import PersonSource
 
 from .models import (
     Person,
@@ -9,6 +8,11 @@ from .models import (
 )
 
 
+class PartyMembershipInline(admin.StackedInline):
+    model = PartyMembership
+    extra = 1
+
+
 class PersonSourceInline(admin.TabularInline):
     model = PersonSource
     extra = 1
@@ -16,7 +20,11 @@ class PersonSourceInline(admin.TabularInline):
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    inlines = [PersonSourceInline]
+
+    inlines = [
+        PartyMembershipInline,
+        PersonSourceInline
+    ]
 
 
 @admin.register(Party)

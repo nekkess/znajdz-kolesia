@@ -26,8 +26,15 @@ body:not(.home-page){
 }
 
         .navbar-custom{
-            background:#e10600;
-        }
+    background:#e10600;
+    min-height:100px;
+}
+
+.navbar-custom .container{
+    min-height:100px;
+    display:flex;
+    align-items:center;
+}
 
         .navbar-logo{
             height:70px;
@@ -97,6 +104,26 @@ body:not(.home-page){
         margin-top: 0;
     }
 
+}
+
+        .support-btn{
+    background:white;
+    color:#c00000;
+
+    padding:12px 24px;
+
+    border-radius:12px;
+
+    font-weight:700;
+    text-decoration:none;
+
+    transition:.2s;
+}
+
+.support-btn:hover{
+    background:#f5f5f5;
+    color:#900;
+    transform:translateY(-1px);
 }
 
     </style>
@@ -219,79 +246,70 @@ body:not(.home-page){
     </ul>
 
 </div>
-    <div class="nav-item dropdown">
-
+ <div class="nav-item dropdown">
 
     <a class="nav-link dropdown-toggle"
-   href="#"
-   role="button"
-   data-bs-toggle="dropdown"
-   aria-expanded="false">
+       href="#"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
         Więcej
     </a>
 
+    <ul class="dropdown-menu">
+
+        <li>
+            <a class="dropdown-item" href="/o-nas/">
+                O projekcie
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="/kontakt/">
+                Kontakt
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="/faq/">
+                FAQ
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item" href="/kontakt/">
+                Zgłoś osobę
+            </a>
+        </li>
+
+
+
+        <li>
+            <a class="dropdown-item" href="/wspieraj/">
+                ☕Kup mi kawę
+            </a>
+        </li>
+
+
+
+    </ul>
+
 
 </div>
-
-        <ul class="dropdown-menu">
-
-            <li>
-                <a class="dropdown-item" href="/o-nas/">
-                    O projekcie
-                </a>
-            </li>
-
-            <li>
-                <a class="dropdown-item" href="/kontakt/">
-                    Kontakt
-                </a>
-            </li>
-
-            <li>
-                <a class="dropdown-item" href="/faq/">
-                    FAQ
-                </a>
-            </li>
-
-            <li>
-                <a class="dropdown-item" href="/metodologia/">
-                    Metodologia
-                </a>
-            </li>
-
-            <li>
-                <a class="dropdown-item" href="/kontakt/">
-                    Zgłoś osobę
-                </a>
-            </li>
-            <li>
-    <a class="dropdown-item" href="/rodziny-politykow/">
-        Rodziny Polityków
+<li class="nav-item ms-3">
+    <a href="/wspieraj/"
+       class="support-btn">
+        ❤️ Wspieraj projekt
     </a>
 </li>
-
-<li>
-    <a class="dropdown-item" href="/nepotyzm/">
-        Nepotyzm
-    </a>
-</li>
-
-<li>
-    <a class="dropdown-item" href="/najlepiej-oplacani/">
-        Najlepiej Opłacani
-    </a>
-</li>
-
         </ul>
 
-    </div>
 
 </div>
 
     </div>
-     </div>
 
-</div>
+
 
 
 

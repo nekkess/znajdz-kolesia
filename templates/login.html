@@ -2,24 +2,63 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container py-5">
 
-    <h1>Logowanie</h1>
+    <div class="row justify-content-center">
 
-    <form method="post">
+        <div class="col-md-6 col-lg-5">
 
-        {% csrf_token %}
+            <div class="card shadow border-0">
 
-        {{ form.as_p }}
+                <div class="card-body p-4">
 
-        <button
-            class="btn btn-danger">
+                    <h2 class="text-center mb-4">
+                        🔐 Logowanie
+                    </h2>
 
-            Zaloguj
+                    <form method="post">
 
-        </button>
+                        {% csrf_token %}
 
-    </form>
+                        {{ form.as_p }}
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger w-100">
+
+                            Zaloguj się
+
+                        </button>
+
+                    </form>
+
+                    <hr>
+
+                    <div class="text-center">
+
+                        <p class="mb-0 text-muted">
+
+                            Nie masz jeszcze konta?
+
+                            <a
+                                href="{% url 'rejestracja' %}"
+                                class="fw-bold text-danger text-decoration-none">
+
+                                Zarejestruj się tutaj
+
+                            </a>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
