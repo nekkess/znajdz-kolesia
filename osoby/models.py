@@ -76,12 +76,12 @@ class Person(models.Model):
 
     def save(self, *args, **kwargs):
 
-        is_new = self.pk is None
+        creating = not self.pk
 
         super().save(*args, **kwargs)
 
-        # geocoding ONLY after first save
-        if is_new and self.city:
+        # geocode tylko dla nowych i tylko jeśli city istnieje
+        if creating and self.city:
 
             try:
                 geolocator = Nominatim(user_agent="zlodziejpl")
@@ -92,35 +92,10 @@ class Person(models.Model):
                 )
 
                 if location:
-                    self.latitude = location.latitude
-                    self.longitude = location.longitude
-
-                    address = location.raw.get("address", {})
-                    state = address.get("state", "")
-
-                    mapping = {
-                        "Województwo dolnośląskie": "dolnoslaskie",
-                        "Województwo kujawsko-pomorskie": "kujawsko_pomorskie",
-                        "Województwo lubelskie": "lubelskie",
-                        "Województwo lubuskie": "lubuskie",
-                        "Województwo łódzkie": "lodzkie",
-                        "Województwo małopolskie": "malopolskie",
-                        "Województwo mazowieckie": "mazowieckie",
-                        "Województwo opolskie": "opolskie",
-                        "Województwo podkarpackie": "podkarpackie",
-                        "Województwo podlaskie": "podlaskie",
-                        "Województwo pomorskie": "pomorskie",
-                        "Województwo śląskie": "slaskie",
-                        "Województwo świętokrzyskie": "swietokrzyskie",
-                        "Województwo warmińsko-mazurskie": "warminsko_mazurskie",
-                        "Województwo wielkopolskie": "wielkopolskie",
-                        "Województwo zachodniopomorskie": "zachodniopomorskie",
-                    }
-
-                    if state in mapping:
-                        self.voivodeship = mapping[state]
-
-                    super().save(update_fields=["latitude", "longitude", "voivodeship"])
+                    Person.objects.filter(pk=self.pk).update(
+                        latitude=location.latitude,
+                        longitude=location.longitude
+                    )
 
             except Exception:
                 pass
