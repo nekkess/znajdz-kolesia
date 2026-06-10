@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<!--Ranking Partii-->
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+<!--    <h1 class="mb-5">-->
+<!--        🏆 Ranking Partii-->
+<!--    </h1>-->
+
+    <!-- PODIUM -->
+
+    <h2 class="mb-4">
+        🏆 Podium
+    </h2>
+
+    <div class="row g-4 px-3 mb-5">
+
+        {% for party in parties|slice:":3" %}
+
+        <div class="col-md-4">
+
+            <div class="card text-center shadow-lg h-100">
+
+                <div class="card-body py-5">
+
+                    {% if forloop.counter == 1 %}
+                        <h1 class="display-1">🥇</h1>
+                    {% elif forloop.counter == 2 %}
+                        <h1 class="display-1">🥈</h1>
+                    {% else %}
+                        <h1 class="display-1">🥉</h1>
+                    {% endif %}
+
+                    <h2 class="mt-3">
+                        {{ party.name }}
+                    </h2>
+
+                    <h4 class="text-muted">
+                        {{ party.people_count }} osób
+                    </h4>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- WYKRES -->
+
+    <div class="card mb-5 shadow-sm">
+
+        <div class="card-body">
+
+            <h3 class="mb-4">
+                📊 Ilu mam kolesi?
+            </h3>
+
+            <canvas id="partyChart" height="120"></canvas>
+
+        </div>
+
+    </div>
+
+    <!-- STATYSTYKI -->
+
+    <div class="row mb-5 g-4">
+
+        <div class="col-md-4">
+
+            <div class="card text-center shadow-sm">
+
+                <div class="card-body">
+
+                    <h5>🏛️ Liczba partii</h5>
+
+                    <h2>{{ parties|length }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card text-center shadow-sm">
+
+                <div class="card-body">
+
+                    <h5>👥 Łączna liczba osób</h5>
+
+                    <h2>{{ total_people }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card text-center shadow-sm">
+
+                <div class="card-body">
+
+                    <h5>🥇 Lider rankingu</h5>
+
+                    <h2>{{ top_party.name }}</h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TABELA -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <h3 class="mb-4">
+                📋 Pełny ranking
+            </h3>
+
+            <table class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th>Miejsce</th>
+                        <th>Partia</th>
+                        <th>Liczba osób</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                {% for party in parties %}
+
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ party.name }}</td>
+                        <td>{{ party.people_count }}</td>
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const ctx = document.getElementById('partyChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [
+            {% for party in parties %}
+                "{{ party.name }}",
+            {% endfor %}
+        ],
+        datasets: [{
+            label: 'Liczba osób',
+            data: [
+                {% for party in parties %}
+                    {{ party.people_count }},
+                {% endfor %}
+            ],
+            backgroundColor: '#e10600'
+        }]
+    },
+    options: {
+        responsive: true,
+
+        scales: {
+
+            x: {
+                ticks: {
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    }
+                }
+            },
+
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1,
+                    precision: 0
+                }
+            }
+
+        },
+
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+</script>
+
+{% endblock %}

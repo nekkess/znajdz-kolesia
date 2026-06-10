@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ person.first_name }} {{ person.last_name }}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h1>
+        {{ person.first_name }}
+        {{ person.last_name }}
+    </h1>
+
+    <hr>
+
+    <p>
+        <strong>Stanowisko:</strong>
+        {{ person.position }}
+    </p>
+
+    <p>
+        <strong>Organizacja:</strong>
+        {{ person.organization }}
+    </p>
+
+    <p>
+        <strong>Miasto:</strong>
+        {{ person.city }}
+    </p>
+
+    <p>
+        <strong>Wynagrodzenie:</strong>
+        {{ person.annual_salary }}
+    </p>
+
+    <p>
+        {{ person.description }}
+    </p>
+
+</div>
+
+{% endblock %}

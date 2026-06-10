@@ -1,0 +1,610 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+
+{% block title %}
+Tracker Kolesiostwa
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+<style>
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f6f8;
+        }
+
+        .navbar-custom{
+    background:#e10600;
+}
+
+.btn-danger{
+    background:#e10600;
+    border:none;
+}
+.navbar-nav .nav-link{
+    color:white !important;
+    font-size:1.3rem;
+    font-weight:700;
+}
+
+.navbar .container{
+    display:flex;
+    align-items:center;
+}
+
+.hero-subtitle{
+    font-size:1.6rem;
+    max-width:900px;
+    margin:0 auto 40px;
+    opacity:.9;
+}
+
+.site-logo {
+    height: 80px;
+    width: auto;
+}
+
+.navbar-custom .container {
+    min-height: 90px;
+    display: flex;
+    align-items: center;
+}
+
+       .hero {
+    height: 100vh;
+
+    background-image:
+linear-gradient(
+rgba(0,0,0,.75),
+rgba(0,0,0,.75)
+),
+
+
+url("/static/images/sejm-sala-plenarna.jpeg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+    color: white;
+}
+.hero-content h1 {
+    font-size: 5rem;
+    font-weight: 800;
+}
+
+.hero-content p {
+    font-size: 1.4rem;
+    margin: 20px 0 40px;
+}
+
+.hero-search {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.hero-search input {
+    width: 500px;
+    padding: 18px;
+    border-radius: 12px;
+    border: none;
+}
+
+.hero-search button {
+    padding: 18px 30px;
+    border: none;
+    border-radius: 12px;
+    background: #c40000;
+    color: white;
+    font-weight: 700;
+}
+
+.navbar-logo{
+    height: 70px;
+    width: auto;
+    display:block;
+}
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            opacity: 0.85;
+        }
+
+        .search-card {
+            margin-top: -40px;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,.12);
+        }
+
+        .stats-box {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,.06);
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .person-card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,.08);
+            transition: 0.2s;
+            height: 100%;
+        }
+
+        .person-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .person-photo {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+}
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        .salary {
+            font-weight: 700;
+            color: #0d6efd;
+        }
+
+        .footer {
+            margin-top: 80px;
+            padding: 30px 0;
+            text-align: center;
+            color: #6c757d;
+        }
+
+
+        .btn-search{
+    background: #A00000;
+    border: none;
+}
+        .navbar-nav .nav-link{
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-left: 25px;
+}
+
+.hero .btn-light{
+    border-radius:16px;
+    font-size:1.3rem;
+    transition:.2s;
+}
+
+.hero .btn-light:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+
+        .salary-value{
+    font-size:24px;
+    font-weight:700;
+    color:#198754;
+}
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+
+
+
+<script>
+document.body.classList.add("home-page");
+</script>
+
+<section class="hero">
+
+    <div class="container">
+
+        <h1>
+            TRACKER KOLESIOSTWA
+        </h1>
+
+       <p class="hero-subtitle">
+    Sprawdź kto zajmuje stanowiska publiczne,
+    gdzie pracował wcześniej i ile zarabia.
+</p>
+
+        <div class="row justify-content-center mt-5">
+
+    <div class="col-md-6 col-lg-4 mb-3">
+        <a href="/mapa/"
+           class="btn btn-light btn-lg w-100 py-4 fw-bold">
+            🗺️ Mapa Kolesi
+        </a>
+    </div>
+
+
+
+    <div class="col-md-6 col-lg-4 mb-3">
+        <a href="/partie/"
+           class="btn btn-light btn-lg w-100 py-4 fw-bold">
+            🏛️ Ranking Partii
+        </a>
+    </div>
+
+
+
+    <div class="col-md-6 col-lg-4 mb-3">
+        <a href="/#wyszukiwarka"
+           class="btn btn-light btn-lg w-100 py-4 fw-bold">
+            🔎 Wyszukiwarka
+        </a>
+    </div>
+
+</div>
+    </div>
+
+</section>
+
+
+<div class="container mt-5">
+
+    <div class="row mb-5">
+
+        <div class="col-md-6">
+
+            <div class="stats-box">
+
+                <div class="stats-number">
+                    {{ count }}
+                </div>
+
+                <div>
+                    Osób w bazie
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="stats-box">
+
+                <div class="stats-number">
+    {{ salary_sum|intcomma }} zł
+</div>
+
+<div>
+    Łączne wynagrodzenia
+</div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+<section id="wyszukiwarka" class="py-5 bg-white mb-5">
+
+    <div class="container">
+
+        <h2 class="text-center fw-bold mb-4">
+            Wyszukiwarka osób
+        </h2>
+
+        <form action="/" method="get">
+
+            <div class="row justify-content-center">
+
+                <div class="col-lg-8">
+
+                    <div class="input-group input-group-lg">
+
+                        <input
+                            type="text"
+                            name="q"
+                            value="{{ query }}"
+                            class="form-control"
+                            placeholder="Wpisz nazwisko, stanowisko lub instytucję">
+
+                        <button
+                            class="btn btn-danger"
+                            type="submit">
+
+                            Szukaj
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="section-title mb-0">
+        Osoby
+    </h2>
+
+    <div class="d-flex gap-2">
+
+        <a href="?q={{ query }}&sort=salary#wyszukiwarka"
+   class="btn btn-outline-dark">
+    Najwyższe wynagrodzenia
+</a>
+
+<a href="?q={{ query }}&sort=name#wyszukiwarka"
+   class="btn btn-outline-dark">
+    A-Z
+</a>
+<a href="?sort=za#wyszukiwarka"
+   class="btn btn-outline-dark">
+    Z-A
+</a>
+    </div>
+
+</div>
+
+    <div class="row">
+
+
+
+  {% for person in people %}
+
+<div class="col-lg-4 col-md-6 mb-4">
+
+    <a href="#"
+   onclick="openPersonModal({{ person.id }}); return false;"
+   class="text-decoration-none text-dark">
+
+        <div class="card person-card">
+
+           {% if person.photo %}
+
+<img
+    src="{{ person.photo.url }}"
+    class="card-img-top person-photo">
+
+{% else %}
+
+<div class="person-photo d-flex align-items-center justify-content-center bg-light">
+
+    <h1 class="display-1">
+        👤
+    </h1>
+
+</div>
+
+{% endif %}
+
+            <div class="card-body">
+
+                <h5 class="fw-bold">
+                    {{ person.first_name }}
+                    {{ person.last_name }}
+                </h5>
+
+                <p class="text-muted mb-2">
+                    {{ person.position }}
+                </p>
+
+                <p class="mb-2">
+                    {{ person.organization }}
+                </p>
+
+                {% if person.annual_salary %}
+
+<div class="salary-box">
+
+    <div class="salary-label">
+        Roczne wynagrodzenie:
+    </div>
+
+    <div class="salary-value">
+        {{ person.annual_salary|floatformat:0|intcomma }} zł
+    </div>
+
+</div>
+
+{% elif person.salary_min and person.salary_max %}
+
+<div class="salary-box">
+
+    <div class="salary-label">
+        Szacowane roczne wynagrodzenie:
+    </div>
+
+    <div class="salary-value">
+        {{ person.salary_min|floatformat:0|intcomma }}
+        -
+        {{ person.salary_max|floatformat:0|intcomma }} zł
+    </div>
+
+</div>
+
+{% endif %}
+
+            </div>
+
+        </div>
+
+    </a>
+
+</div>
+
+{% empty %}
+
+<div class="col-12">
+
+    <div class="alert alert-secondary">
+
+        Nie znaleziono wyników.
+
+    </div>
+
+</div>
+
+{% endfor %}
+
+    </div>
+
+</div>
+
+<footer class="footer">
+
+    <div class="container">
+
+        <p>
+            Tracker Kolesiostwa
+        </p>
+
+        <p>
+            <a href="/admin/"
+               class="text-muted text-decoration-none">
+                Panel administracyjny
+            </a>
+        </p>
+
+    </div>
+
+</footer>
+
+
+<script>
+
+window.addEventListener("load", function() {
+
+    const params = new URLSearchParams(
+        window.location.search
+    );
+
+    if(params.get("q")) {
+
+        document
+            .getElementById("wyszukiwarka")
+            .scrollIntoView({
+                behavior: "smooth"
+            });
+
+    }
+
+});
+
+</script>
+
+<script>
+
+function openPersonModal(personId) {
+
+    fetch(`/osoba/${personId}/`, {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+
+        document.getElementById(
+            "personModalBody"
+        ).innerHTML = html;
+
+        const modal = new bootstrap.Modal(
+            document.getElementById("personModal")
+        );
+
+        modal.show();
+
+    });
+
+}
+
+</script>
+{% include "components/person_modal.html" %}
+
+<script>
+
+window.vote = function(personId, value) {
+
+    fetch(`/vote/${personId}/${value}/`)
+    .then(response => response.json())
+    .then(data => {
+
+        document.getElementById("upvotes").innerText =
+            data.upvotes;
+
+        document.getElementById("downvotes").innerText =
+            data.downvotes;
+
+        document.getElementById("approval").innerText =
+            data.approval + "% poparcia";
+
+        document.getElementById("vote-message").style.display =
+            "block";
+
+        if (value == 1) {
+
+            document
+                .getElementById("upvote-btn")
+                .classList.add("btn-dark");
+
+            document
+                .getElementById("downvote-btn")
+                .classList.remove("btn-dark");
+
+        } else {
+
+            document
+                .getElementById("downvote-btn")
+                .classList.add("btn-dark");
+
+            document
+                .getElementById("upvote-btn")
+                .classList.remove("btn-dark");
+
+        }
+
+    });
+
+}
+
+</script>
+
+
+{% endblock %}

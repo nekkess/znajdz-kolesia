@@ -1,0 +1,384 @@
+{% extends 'base.html' %}
+
+{% load humanize %}
+
+{% block title %}
+Mapa Kolesi
+{% endblock %}
+
+{% block content %}
+<style>
+
+
+
+.map-search{
+    position:absolute;
+    top:120px;
+    left:50%;
+    transform:translateX(-50%);
+
+    z-index:1000;
+
+    width:500px;
+
+    background:white;
+    padding:15px;
+    border-radius:16px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+
+/* PANEL PO PRAWEJ */
+
+#personPanel {
+    height: 700px;
+}
+
+.profile-photo {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.profile-content {
+    padding-top: 10px;
+}
+.salary-box{
+    background:#f8f9fa;
+    border-radius:12px;
+    padding:15px;
+    margin-top:15px;
+    margin-bottom:15px;
+}
+
+.salary-label{
+    color:#6c757d;
+    font-size:14px;
+}
+
+.salary-value{
+    font-size:26px;
+    font-weight:700;
+    color:#198754;
+}
+
+    .person-modal{
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.6);
+
+    z-index:9999;
+}
+
+.person-modal-content{
+
+    width:90%;
+    max-width:1400px;
+
+    height:90vh;
+
+    margin:3vh auto;
+
+    background:white;
+
+    border-radius:20px;
+
+    overflow-y:auto;
+
+    position:relative;
+
+    padding:40px;
+}
+
+    .map-search{
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+}
+
+.map-search input{
+    height: 56px;
+    font-size: 1.1rem;
+}
+
+
+
+</style>
+
+
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"/>
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css"/>
+
+
+<div class="container-fluid p-0">
+
+    <h1 class="mb-4">
+        🗺️ Mapa Kolesi
+    </h1>
+
+    <link
+rel="stylesheet"
+href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+    <div class="map-search">
+
+    <input
+        type="text"
+        id="personSearch"
+        class="form-control"
+        placeholder="Szukaj osoby, miasta, stanowiska...">
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-lg-8">
+
+        <div id="map"
+             style="height:700px;">
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div id="personPanel"
+             class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h4>
+                    👈 Wybierz osobę na mapie
+                </h4>
+
+                <p class="text-muted">
+                    Kliknij pinezkę aby zobaczyć szczegóły.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
+
+
+
+<script>
+
+var map = L.map('map').setView(
+    [52.237, 21.017],
+    6
+);
+
+L.tileLayer(
+    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+        maxZoom: 19
+    }
+).addTo(map);
+
+var markers = [];
+var clusterGroup = L.markerClusterGroup();
+
+{% for person in people %}
+
+const marker{{ person.id }} = L.marker([
+    {{ person.latitude }},
+    {{ person.longitude }}
+]);
+
+
+marker{{ person.id }}.on('click', function() {
+
+    document.getElementById('personPanel').innerHTML = `
+
+        <div class="card-body d-flex flex-column h-100">
+
+            {% if person.photo %}
+                <img
+                    src="{{ person.photo.url }}"
+                    class="profile-photo">
+            {% else %}
+                <div class="profile-photo d-flex align-items-center justify-content-center bg-light">
+                    <h1>👤</h1>
+                </div>
+            {% endif %}
+
+
+            <div class="profile-content">
+
+                <h3 class="mt-3 mb-2">
+                    {{ person.first_name }}
+                    {{ person.last_name }}
+                </h3>
+
+
+<!--      BAGDE PARTYJNY   -->
+                {% if person.current_party %}
+                        <div class="mb-3">
+    <span class="badge rounded-pill bg-danger">
+        {{ person.current_party }}
+    </span>
+
+
+                <div class="mb-2">
+                    💼 {{ person.position }}
+                </div>
+
+                <div class="mb-2">
+                    🏢 {{ person.organization }}
+                </div>
+
+                <div class="mb-2">
+                    📍 {{ person.city }}
+                </div>
+
+               <div class="salary-box">
+    <div class="salary-label">
+        Roczne wynagrodzenie
+    </div>
+
+    <div class="salary-value">
+        {{ person.salary_display }}
+    </div>
+</div>
+
+
+</div>
+
+
+{% endif %}
+
+            </div>
+
+            <button
+    class="btn btn-danger w-100 mt-auto"
+    onclick="openPersonModal({{ person.id }})">
+
+    Zobacz profil
+
+</button>
+
+        </div>
+
+    `;
+
+});
+
+clusterGroup.addLayer(marker{{ person.id }});
+
+markers.push({
+    marker: marker{{ person.id }},
+    name: "{{ person.first_name }} {{ person.last_name }}",
+    city: "{{ person.city }}",
+    position: "{{ person.position }}",
+    organization: "{{ person.organization }}"
+});
+
+{% endfor %}
+
+map.addLayer(clusterGroup);
+
+document
+.getElementById('personSearch')
+.addEventListener('input', function() {
+
+    const query = this.value.toLowerCase();
+
+    clusterGroup.clearLayers();
+
+    markers.forEach(item => {
+
+        const searchableText = (
+            item.name + ' ' +
+            item.city + ' ' +
+            item.position + ' ' +
+            item.organization
+        ).toLowerCase();
+
+        if (searchableText.includes(query)) {
+            clusterGroup.addLayer(item.marker);
+        }
+
+    });
+
+
+});
+
+    function openPersonModal(personId) {
+
+    fetch(`/osoba/${personId}/`, {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.text())
+    .then(html => {
+
+        document.getElementById(
+            "personModalBody"
+        ).innerHTML = html;
+
+        const modal = new bootstrap.Modal(
+            document.getElementById("personModal")
+        );
+
+        modal.show();
+
+    });
+
+}
+
+window.vote = function(personId, value) {
+
+    fetch(`/vote/${personId}/${value}/`)
+    .then(response => response.json())
+    .then(data => {
+
+        document.getElementById("upvotes").innerText =
+            data.upvotes;
+
+        document.getElementById("downvotes").innerText =
+            data.downvotes;
+
+        document.getElementById("approval").innerText =
+            data.approval + "% poparcia";
+
+        document.getElementById("vote-message").style.display =
+            "block";
+
+
+    });
+
+}
+
+
+</script>
+
+    {% include "components/person_modal.html" %}
+</div>
+
+{% endblock %}
