@@ -280,7 +280,9 @@ document.body.classList.add("home-page");
             <div class="stats-box">
 
                 <div class="stats-number">
-    {{ salary_sum|intcomma }} zł
+    {% load humanize %}
+
+{{ salary_sum|floatformat:0|intcomma }} zł
 </div>
 
 <div>
