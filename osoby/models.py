@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from geopy.geocoders import Nominatim
+from cloudinary.models import CloudinaryField
 
 VOIVODESHIPS = [
     ("dolnoslaskie", "Dolnośląskie"),
@@ -62,11 +63,8 @@ class Person(models.Model):
         blank=True
     )
 
-    photo = models.ImageField(
-        upload_to="people/",
-        null=True,
-        blank=True
-    )
+    photo = CloudinaryField('image', blank=True, null=True)
+
 
     description = models.TextField(
         blank=True,
