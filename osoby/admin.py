@@ -1,10 +1,5 @@
 from django.contrib import admin
-from .models import (
-    Person,
-    Party,
-    PartyMembership,
-    PersonSource
-)
+from .models import Person, Party, PartyMembership, PersonSource
 
 
 class PartyMembershipInline(admin.StackedInline):
@@ -25,10 +20,13 @@ class PersonAdmin(admin.ModelAdmin):
         PersonSourceInline
     ]
 
-    # 🔥 KLUCZOWA POPRAWKA
     def save_model(self, request, obj, form, change):
-        obj.save()  # zapisuje Person PIERWSZY
-        form.save_m2m()  # potem relacje many-to-many (bez crasha)
+        # 🔥 KLUCZ: zapisz PERSON bez inline
+        obj.save()
+
+    def save_related(self, request, form, formsets, change):
+        # 🔥 KLUCZ: dopiero potem inline
+        super().save_related(request, form, formsets, change)
 
 
 @admin.register(Party)
