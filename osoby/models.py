@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from geopy.geocoders import Nominatim
 
-
 VOIVODESHIPS = [
     ("dolnoslaskie", "Dolnośląskie"),
     ("kujawsko_pomorskie", "Kujawsko-Pomorskie"),
@@ -27,22 +26,11 @@ class Person(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
 
-    position = models.CharField(
-        max_length=255,
-        blank=True
-    )
+    position = models.CharField(max_length=255, blank=True)
 
+    organization = models.CharField(max_length=255, blank=True)
 
-
-    organization = models.CharField(
-        max_length=255,
-        blank=True
-    )
-
-    city = models.CharField(
-        max_length=100,
-        blank=True
-    )
+    city = models.CharField(max_length=100, blank=True)
 
     voivodeship = models.CharField(
         max_length=50,
@@ -50,15 +38,8 @@ class Person(models.Model):
         blank=True
     )
 
-    latitude = models.FloatField(
-        null=True,
-        blank=True
-    )
-
-    longitude = models.FloatField(
-        null=True,
-        blank=True
-    )
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
     annual_salary = models.DecimalField(
         max_digits=12,
@@ -87,9 +68,9 @@ class Person(models.Model):
         blank=True
     )
 
-
     description = models.TextField(
-        blank=True
+        blank=True,
+        verbose_name="Opis działalności"
     )
 
     party = models.CharField(
@@ -98,19 +79,12 @@ class Person(models.Model):
         verbose_name="Partia"
     )
 
-    description = models.TextField(
-        blank=True,
-        verbose_name="Opis działalności"
-    )
-
     def save(self, *args, **kwargs):
 
         if self.city:
 
             try:
-                geolocator = Nominatim(
-                    user_agent="zlodziejpl"
-                )
+                geolocator = Nominatim(user_agent="zlodziejpl")
 
                 location = geolocator.geocode(
                     f"{self.city}, Polska",
@@ -119,19 +93,29 @@ class Person(models.Model):
                 )
 
                 if location:
-
                     self.latitude = location.latitude
                     self.longitude = location.longitude
 
-                    address = location.raw.get(
-                        "address",
-                        {}
-                    )
-
+                    address = location.raw.get("address", {})
                     state = address.get("state", "")
 
                     mapping = {
-                        # zostaw cały swój mapping bez zmian
+                        "Województwo dolnośląskie": "dolnoslaskie",
+                        "Województwo kujawsko-pomorskie": "kujawsko_pomorskie",
+                        "Województwo lubelskie": "lubelskie",
+                        "Województwo lubuskie": "lubuskie",
+                        "Województwo łódzkie": "lodzkie",
+                        "Województwo małopolskie": "malopolskie",
+                        "Województwo mazowieckie": "mazowieckie",
+                        "Województwo opolskie": "opolskie",
+                        "Województwo podkarpackie": "podkarpackie",
+                        "Województwo podlaskie": "podlaskie",
+                        "Województwo pomorskie": "pomorskie",
+                        "Województwo śląskie": "slaskie",
+                        "Województwo świętokrzyskie": "swietokrzyskie",
+                        "Województwo warmińsko-mazurskie": "warminsko_mazurskie",
+                        "Województwo wielkopolskie": "wielkopolskie",
+                        "Województwo zachodniopomorskie": "zachodniopomorskie",
                     }
 
                     if state in mapping:
@@ -140,11 +124,10 @@ class Person(models.Model):
             except Exception:
                 pass
 
-
+        super().save(*args, **kwargs)
 
     @property
     def salary_display(self):
-
         if self.annual_salary:
             return f"{int(self.annual_salary):,} zł"
 
@@ -176,9 +159,7 @@ class Person(models.Model):
         if total == 0:
             return 0
 
-        return round(
-            self.upvotes * 100 / total
-        )
+        return round(self.upvotes * 100 / total)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -199,7 +180,6 @@ class PersonSource(models.Model):
     )
 
     title = models.CharField(max_length=255)
-
     url = models.URLField()
 
     def __str__(self):
@@ -213,39 +193,21 @@ class PartyMembership(models.Model):
         related_name="memberships"
     )
 
-    party = models.ForeignKey(
-        Party,
-        on_delete=models.CASCADE
-    )
+    party = models.ForeignKey(Party, on_delete=models.CASCADE)
 
     start_year = models.IntegerField()
 
-    end_year = models.IntegerField(
-        null=True,
-        blank=True
-    )
+    end_year = models.IntegerField(null=True, blank=True)
 
+    position = models.CharField(max_length=255, blank=True)
 
-    position = models.CharField(
-    max_length=255,
-    blank=True
-    )
-
-    description = models.TextField(
-        blank=True
-    )
+    description = models.TextField(blank=True)
 
     class Meta:
         ordering = ["start_year"]
-
         constraints = [
             models.UniqueConstraint(
-                fields=[
-                    "person",
-                    "party",
-                    "start_year",
-                    "end_year"
-                ],
+                fields=["person", "party", "start_year", "end_year"],
                 name="unique_party_membership"
             )
         ]
@@ -254,30 +216,18 @@ class PartyMembership(models.Model):
         return f"{self.person} - {self.party}"
 
 
-
 class PersonVote(models.Model):
-
     person = models.ForeignKey(
         Person,
         on_delete=models.CASCADE,
         related_name="votes"
     )
 
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    vote = models.IntegerField(
-        choices=[
-            (1, "Upvote"),
-            (-1, "Downvote")
-        ]
-    )
+    vote = models.IntegerField(choices=[(1, "Upvote"), (-1, "Downvote")])
 
-    created_at = models.DateTimeField(
-        auto_now_add=True
-    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ("person", "user")
