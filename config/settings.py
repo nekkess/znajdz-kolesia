@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-$8jox9)ma1rw!+!!6*ep3ip_bcc1x@_($253a7@z30mbzo@icm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "znajdz-kolesia-production.up.railway.app",
+]
 
 
 # Application definition
@@ -138,3 +140,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 
 LOGIN_URL = "/logowanie/"
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://znajdz-kolesia-production.up.railway.app",
+]
