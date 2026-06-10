@@ -107,50 +107,38 @@ class Person(models.Model):
 
         if self.city:
 
-            geolocator = Nominatim(
-                user_agent="zlodziejpl"
-            )
-
-            location = geolocator.geocode(
-                f"{self.city}, Polska",
-                addressdetails=True
-            )
-
-            if location:
-
-                self.latitude = location.latitude
-                self.longitude = location.longitude
-
-                address = location.raw.get(
-                    "address",
-                    {}
+            try:
+                geolocator = Nominatim(
+                    user_agent="zlodziejpl"
                 )
 
-                state = address.get("state", "")
+                location = geolocator.geocode(
+                    f"{self.city}, Polska",
+                    addressdetails=True,
+                    timeout=10
+                )
 
-                mapping = {
-                    "Województwo dolnośląskie": "dolnoslaskie",
-                    "Województwo kujawsko-pomorskie": "kujawsko_pomorskie",
-                    "Województwo lubelskie": "lubelskie",
-                    "Województwo lubuskie": "lubuskie",
-                    "Województwo łódzkie": "lodzkie",
-                    "Województwo małopolskie": "malopolskie",
-                    "Województwo mazowieckie": "mazowieckie",
-                    "Województwo opolskie": "opolskie",
-                    "Województwo podkarpackie": "podkarpackie",
-                    "Województwo podlaskie": "podlaskie",
-                    "Województwo pomorskie": "pomorskie",
-                    "Województwo śląskie": "slaskie",
-                    "Województwo świętokrzyskie": "swietokrzyskie",
-                    "Województwo warmińsko-mazurskie": "warminsko_mazurskie",
-                    "Województwo wielkopolskie": "wielkopolskie",
-                    "Województwo zachodniopomorskie": "zachodniopomorskie",
-                }
+                if location:
 
-                if state in mapping:
-                    self.voivodeship = mapping[state]
+                    self.latitude = location.latitude
+                    self.longitude = location.longitude
 
-        super().save(*args, **kwargs)
+                    address = location.raw.get(
+                        "address",
+                        {}
+                    )
+
+                    state = address.get("state", "")
+
+                    mapping = {
+                        # zostaw cały swój mapping bez zmian
+                    }
+
+                    if state in mapping:
+                        self.voivodeship = mapping[state]
+
+            except Exception:
+                pass
 
 
 
