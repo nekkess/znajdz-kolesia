@@ -368,6 +368,7 @@ marker{{ person.id }}.on('click', function() {
     {% endif %}
 
     document.getElementById('mobileMarkerProfileBtn').onclick = function() {
+        closeMobileMarkerPopup();
         openPersonModal({{ person.id }});
     };
 
