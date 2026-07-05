@@ -43,6 +43,7 @@ Tracker Kolesiostwa
 
        .hero {
     height: 100vh;
+    margin-top: -120px;
 
     background-image:
 linear-gradient(
@@ -353,26 +354,22 @@ document.body.classList.add("home-page");
 
 
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
 
     <h2 class="section-title mb-0">
         Osoby
     </h2>
 
-    <div class="d-flex gap-2">
+    <div class="d-flex flex-wrap gap-2">
 
         <a href="?q={{ query }}&sort=salary#wyszukiwarka"
    class="btn btn-outline-dark">
     Najwyższe wynagrodzenia
 </a>
 
-<a href="?q={{ query }}&sort=name#wyszukiwarka"
+<a href="?q={{ query }}&sort={% if sort == 'az' %}za{% else %}az{% endif %}#wyszukiwarka"
    class="btn btn-outline-dark">
-    A-Z
-</a>
-<a href="?sort=za#wyszukiwarka"
-   class="btn btn-outline-dark">
-    Z-A
+    A-Z {% if sort == 'az' %}↓{% elif sort == 'za' %}↑{% endif %}
 </a>
     </div>
 

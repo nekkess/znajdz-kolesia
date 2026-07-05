@@ -104,6 +104,7 @@ def home(request):
             "query": query,
             "count": people.count(),
             "salary_sum": salary_sum,
+            "sort": sort,
         }
     )
 
