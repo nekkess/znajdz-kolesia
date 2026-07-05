@@ -14,6 +14,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "znajdz-kolesia-production.up.railway.app",
+    "www.xn--znajdkolesia-9wc.pl",
+    "xn--znajdkolesia-9wc.pl",
 ]
 
 if not os.environ.get('PGDATABASE'):
@@ -124,4 +126,6 @@ LOGIN_URL = "/logowanie/"
 
 CSRF_TRUSTED_ORIGINS = [
     "https://znajdz-kolesia-production.up.railway.app",
+    "https://www.xn--znajdkolesia-9wc.pl",
+    "https://xn--znajdkolesia-9wc.pl",
 ]
