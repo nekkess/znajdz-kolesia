@@ -111,6 +111,44 @@ Mapa Kolesi
     }
 }
 
+.mobile-marker-popup {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -6px 25px rgba(0,0,0,.2);
+    padding: 20px;
+    z-index: 2000;
+    transform: translateY(120%);
+    transition: transform .25s ease;
+}
+
+.mobile-marker-popup.show {
+    transform: translateY(0);
+}
+
+.mobile-marker-popup-close {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    border: none;
+    background: none;
+    font-size: 1.8rem;
+    line-height: 1;
+    color: #888;
+}
+
+.mobile-marker-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    object-fit: cover;
+    background: #f1f1f1;
+    flex-shrink: 0;
+}
+
 
 
 </style>
@@ -156,7 +194,7 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
 
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-4 d-none d-lg-block">
 
         <div id="personPanel"
              class="card shadow-sm h-100">
@@ -176,6 +214,33 @@ href="https://unpkg.com/leaflet/dist/leaflet.css"/>
         </div>
 
     </div>
+
+</div>
+
+<div id="mobileMarkerPopup" class="mobile-marker-popup d-lg-none">
+
+    <button type="button"
+            class="mobile-marker-popup-close"
+            onclick="closeMobileMarkerPopup()">
+        &times;
+    </button>
+
+    <div class="d-flex align-items-center gap-3">
+
+        <img id="mobileMarkerPhoto"
+             class="mobile-marker-photo"
+             src=""
+             alt="">
+
+        <div class="flex-grow-1">
+            <div id="mobileMarkerName" class="fw-bold fs-5"></div>
+        </div>
+
+    </div>
+
+    <button class="btn btn-danger w-100 mt-3" id="mobileMarkerProfileBtn">
+        Zobacz profil
+    </button>
 
 </div>
 
@@ -291,6 +356,23 @@ marker{{ person.id }}.on('click', function() {
 
     `;
 
+    document.getElementById('mobileMarkerName').textContent =
+        "{{ person.first_name }} {{ person.last_name }}";
+
+    const mobilePhoto = document.getElementById('mobileMarkerPhoto');
+    {% if person.photo %}
+        mobilePhoto.src = "{{ person.photo.url }}";
+        mobilePhoto.style.display = "block";
+    {% else %}
+        mobilePhoto.style.display = "none";
+    {% endif %}
+
+    document.getElementById('mobileMarkerProfileBtn').onclick = function() {
+        openPersonModal({{ person.id }});
+    };
+
+    document.getElementById('mobileMarkerPopup').classList.add('show');
+
 });
 
 clusterGroup.addLayer(marker{{ person.id }});
@@ -332,6 +414,10 @@ document
 
 
 });
+
+    function closeMobileMarkerPopup() {
+        document.getElementById('mobileMarkerPopup').classList.remove('show');
+    }
 
     function openPersonModal(personId) {
 
