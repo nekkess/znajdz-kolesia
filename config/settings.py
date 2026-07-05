@@ -16,6 +16,9 @@ ALLOWED_HOSTS = [
     "znajdz-kolesia-production.up.railway.app",
 ]
 
+if not os.environ.get('PGDATABASE'):
+    ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -73,17 +76,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-# DATABASE (PostgreSQL Railway)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['PGDATABASE'],
-        'USER': os.environ['PGUSER'],
-        'PASSWORD': os.environ['PGPASSWORD'],
-        'HOST': os.environ['PGHOST'],
-        'PORT': os.environ['PGPORT'],
+# DATABASE (PostgreSQL Railway, z fallbackiem na lokalny SQLite gdy brak zmiennych PG*)
+if os.environ.get('PGDATABASE'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['PGDATABASE'],
+            'USER': os.environ['PGUSER'],
+            'PASSWORD': os.environ['PGPASSWORD'],
+            'HOST': os.environ['PGHOST'],
+            'PORT': os.environ['PGPORT'],
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
