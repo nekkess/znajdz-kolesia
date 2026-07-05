@@ -10,7 +10,11 @@
         {% if person.photo %}
             <img
                 src="{{ person.photo.url }}"
-                class="img-fluid rounded shadow-sm">
+                class="modal-person-photo rounded shadow-sm">
+        {% else %}
+            <div class="modal-person-photo modal-person-photo-placeholder rounded shadow-sm d-flex align-items-center justify-content-center bg-light">
+                <span style="font-size:4rem;">👤</span>
+            </div>
         {% endif %}
 
     </div>
@@ -18,7 +22,7 @@
 
     <div class="col-md-8">
 
-        <div class="d-flex justify-content-between align-items-start">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
 
             <div>
 
