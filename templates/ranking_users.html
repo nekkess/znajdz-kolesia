@@ -1,62 +1,244 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Ranking Użytkowników
+Łowcy Kolesi
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.podium-card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    text-align:center;
+    padding:35px 20px;
+    height:100%;
+    transition:.2s;
+}
+
+.podium-card:hover{
+    transform:translateY(-6px);
+}
+
+.podium-card.gold{
+    border-top:6px solid #FFD700;
+}
+
+.podium-card.silver{
+    border-top:6px solid #C0C0C0;
+    margin-top:28px;
+}
+
+.podium-card.bronze{
+    border-top:6px solid #CD7F32;
+    margin-top:28px;
+}
+
+.podium-rank-badge{
+    width:64px;
+    height:64px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+    font-size:1.6rem;
+    color:white;
+    margin:0 auto 18px;
+}
+
+.podium-card.gold .podium-rank-badge{
+    background:linear-gradient(135deg,#FFD700,#FFA500);
+}
+
+.podium-card.silver .podium-rank-badge{
+    background:linear-gradient(135deg,#E8E8E8,#AFAFAF);
+}
+
+.podium-card.bronze .podium-rank-badge{
+    background:linear-gradient(135deg,#CD7F32,#8B5A2B);
+}
+
+.podium-card h3{
+    font-weight:800;
+    margin-bottom:4px;
+}
+
+.section-card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
+
+.stat-card{
+    border:none;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+    text-align:center;
+    padding:25px;
+    height:100%;
+}
+
+.stat-card .stat-icon{
+    font-size:1.8rem;
+}
+
+.stat-card h2{
+    font-weight:800;
+    color:#e10600;
+    margin:8px 0 0;
+}
+
+.ranking-table th{
+    border-top:none;
+    color:#6c757d;
+    font-weight:600;
+    text-transform:uppercase;
+    font-size:.8rem;
+}
+
+.ranking-table td{
+    vertical-align:middle;
+}
+
+.rank-pill{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    background:#f4f6f8;
+    font-weight:700;
+    color:#495057;
+}
+
+</style>
 {% endblock %}
 
 {% block content %}
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
 
-    <h1 class="mb-4">
-        🏆 Ranking Użytkowników
+    <h1 class="mb-2">
+        🏹 Łowcy Kolesi
     </h1>
 
-    <p class="text-muted">
-        Punkty przyznawane są za zaakceptowane zgłoszenia kolesi
-        (10 punktów za każde).
+    <p class="text-muted mb-5">
+        Każde zaakceptowane zgłoszenie to jeden złapany koleś.
         <a href="{% url 'zglos_kolesia' %}">Zgłoś kolesia</a>
-        i wejdź do rankingu.
+        i dołącz do rankingu łowców.
     </p>
 
     {% if ranking %}
 
-    <div class="card shadow-sm border-0">
+    <div class="row g-4 mb-5 justify-content-center">
 
-        <table class="table table-hover mb-0">
+        {% if ranking|length > 1 %}
+        <div class="col-md-4 order-2 order-md-1">
+            <div class="podium-card silver">
+                <div class="podium-rank-badge">2</div>
+                <h3>{{ ranking.1.user.username }}</h3>
+                <p class="text-muted mb-0">🎯 {{ ranking.1.count }} złapanych kolesi</p>
+            </div>
+        </div>
+        {% endif %}
 
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Użytkownik</th>
-                    <th>Zaakceptowane zgłoszenia</th>
-                    <th>Punkty</th>
-                </tr>
-            </thead>
+        <div class="col-md-4 order-1 order-md-2">
+            <div class="podium-card gold">
+                <div class="podium-rank-badge">1</div>
+                <h3>{{ ranking.0.user.username }}</h3>
+                <p class="text-muted mb-0">🎯 {{ ranking.0.count }} złapanych kolesi</p>
+            </div>
+        </div>
 
-            <tbody>
+        {% if ranking|length > 2 %}
+        <div class="col-md-4 order-3 order-md-3">
+            <div class="podium-card bronze">
+                <div class="podium-rank-badge">3</div>
+                <h3>{{ ranking.2.user.username }}</h3>
+                <p class="text-muted mb-0">🎯 {{ ranking.2.count }} złapanych kolesi</p>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">🏹</div>
+                <div class="text-muted">Liczba łowców</div>
+                <h2>{{ ranking|length }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="text-muted">Łącznie złapanych kolesi</div>
+                <h2>{{ total_caught }}</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-icon">🥇</div>
+                <div class="text-muted">Top łowca</div>
+                <h2>{{ ranking.0.user.username }}</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card section-card">
+
+        <div class="card-body p-4">
+
+            <h3 class="mb-4">
+                📋 Pełny ranking
+            </h3>
+
+            <div class="table-responsive">
+
+            <table class="table ranking-table">
+
+                <thead>
+                    <tr>
+                        <th>Miejsce</th>
+                        <th>Łowca</th>
+                        <th>Złapani kolesie</th>
+                    </tr>
+                </thead>
+
+                <tbody>
 
                 {% for entry in ranking %}
 
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ entry.user.username }}</td>
-                    <td>{{ entry.count }}</td>
-                    <td class="fw-bold">{{ entry.points }}</td>
-                </tr>
+                    <tr>
+                        <td><span class="rank-pill">{{ forloop.counter }}</span></td>
+                        <td class="fw-bold">{{ entry.user.username }}</td>
+                        <td>🎯 {{ entry.count }}</td>
+                    </tr>
 
                 {% endfor %}
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
+
+            </div>
+
+        </div>
 
     </div>
 
     {% else %}
 
     <div class="alert alert-info">
-        Nikt jeszcze nie zdobył punktów. Bądź pierwszy!
+        Nikt jeszcze nie złapał kolesia. Bądź pierwszym łowcą!
     </div>
 
     {% endif %}

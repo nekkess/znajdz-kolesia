@@ -240,16 +240,18 @@ def ranking_users(request):
         {
             "user": u,
             "count": u.approved_count,
-            "points": u.approved_count * PersonSubmission.POINTS_PER_APPROVAL,
         }
         for u in users
     ]
+
+    total_caught = sum(entry["count"] for entry in ranking)
 
     return render(
         request,
         "ranking_users.html",
         {
-            "ranking": ranking
+            "ranking": ranking,
+            "total_caught": total_caught,
         }
     )
 

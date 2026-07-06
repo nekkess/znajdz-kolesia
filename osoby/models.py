@@ -214,8 +214,6 @@ class PersonVote(models.Model):
 
 
 class PersonSubmission(models.Model):
-    POINTS_PER_APPROVAL = 10
-
     STATUS_CHOICES = [
         ("pending", "Oczekujące"),
         ("approved", "Zaakceptowane"),
