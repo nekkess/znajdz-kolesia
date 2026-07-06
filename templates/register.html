@@ -1,25 +1,108 @@
 {% extends "base.html" %}
 
+{% block title %}
+Rejestracja
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.auth-card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 15px 45px rgba(0,0,0,.1);
+    overflow:hidden;
+}
+
+.auth-card .card-header{
+    background:#e10600;
+    color:white;
+    border:none;
+    padding:32px 32px 24px;
+    text-align:center;
+}
+
+.auth-card .card-header h2{
+    font-weight:800;
+    margin:0;
+}
+
+.auth-card .card-body{
+    padding:32px;
+}
+
+.auth-card .btn-danger{
+    border-radius:12px;
+    padding:12px;
+    font-weight:700;
+}
+
+.form-floating > label{
+    color:#6c757d;
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
 
-<div class="container">
+<div class="container py-5">
 
-    <h1>Rejestracja</h1>
+    <div class="row justify-content-center">
 
-    <form method="post">
+        <div class="col-md-6 col-lg-5">
 
-        {% csrf_token %}
+            <div class="card auth-card">
 
-        {{ form.as_p }}
+                <div class="card-header">
+                    <h2>👤 Rejestracja</h2>
+                </div>
 
-        <button
-            class="btn btn-danger">
+                <div class="card-body">
 
-            Załóż konto
+                    <form method="post">
 
-        </button>
+                        {% csrf_token %}
 
-    </form>
+                        {% include "components/form_floating_fields.html" %}
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger w-100 mt-2">
+
+                            Załóż konto
+
+                        </button>
+
+                    </form>
+
+                    <hr>
+
+                    <div class="text-center">
+
+                        <p class="mb-0 text-muted">
+
+                            Masz już konto?
+
+                            <a
+                                href="{% url 'logowanie' %}"
+                                class="fw-bold text-danger text-decoration-none">
+
+                                Zaloguj się
+
+                            </a>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

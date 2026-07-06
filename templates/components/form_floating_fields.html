@@ -1,0 +1,25 @@
+{% for field in form.visible_fields %}
+
+<div class="form-floating mb-3">
+
+    {{ field }}
+
+    <label for="{{ field.id_for_label }}">
+        {{ field.label }}
+    </label>
+
+    {% if field.help_text %}
+    <div class="form-text">{{ field.help_text }}</div>
+    {% endif %}
+
+    {% for error in field.errors %}
+    <div class="text-danger small mt-1">{{ error }}</div>
+    {% endfor %}
+
+</div>
+
+{% endfor %}
+
+{% for error in form.non_field_errors %}
+<div class="alert alert-danger py-2">{{ error }}</div>
+{% endfor %}

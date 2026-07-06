@@ -4,29 +4,72 @@
 Zgłoś kolesia
 {% endblock %}
 
+{% block extra_css %}
+<style>
+
+.report-card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 15px 45px rgba(0,0,0,.1);
+    overflow:hidden;
+}
+
+.report-card .card-header{
+    background:#e10600;
+    color:white;
+    border:none;
+    padding:32px 32px 24px;
+}
+
+.report-card .card-header h2{
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.report-card .card-header p{
+    margin:0;
+    opacity:.92;
+}
+
+.report-card .card-body{
+    padding:32px;
+}
+
+.report-card .btn-danger{
+    border-radius:12px;
+    padding:12px;
+    font-weight:700;
+}
+
+.form-floating > label{
+    color:#6c757d;
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
 
 <div class="container py-5">
 
     <div class="row justify-content-center">
 
-        <div class="col-md-9 col-lg-7">
+        <div class="col-md-10 col-lg-8">
 
-            <div class="card shadow border-0">
+            <div class="card report-card">
 
-                <div class="card-body p-4">
-
-                    <h2 class="mb-3">
-                        📝 Zgłoś kolesia
-                    </h2>
-
-                    <p class="text-muted">
+                <div class="card-header">
+                    <h2>📝 Zgłoś kolesia</h2>
+                    <p>
                         Znasz przypadek osoby zatrudnionej dzięki znajomościom
                         lub powiązaniom politycznym? Zgłoś ją tutaj wraz ze
                         źródłem. Każde zgłoszenie jest ręcznie weryfikowane
-                        przed dodaniem do bazy. Za zaakceptowane zgłoszenie
-                        dostajesz punkty liczone w rankingu użytkowników.
+                        przed dodaniem do bazy - za zaakceptowane dostajesz
+                        punkty liczone w rankingu użytkowników.
                     </p>
+                </div>
+
+                <div class="card-body">
 
                     {% if success %}
 
@@ -40,7 +83,7 @@ Zgłoś kolesia
 
                         {% csrf_token %}
 
-                        {{ form.as_p }}
+                        {% include "components/person_fields.html" %}
 
                         <button
                             type="submit"

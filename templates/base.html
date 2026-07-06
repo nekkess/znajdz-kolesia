@@ -143,6 +143,27 @@ body{
     transform:translateY(-1px);
 }
 
+.report-btn{
+    background:transparent;
+    color:white;
+    border:2px solid rgba(255,255,255,.85);
+
+    padding:10px 22px;
+
+    border-radius:12px;
+
+    font-weight:700;
+    text-decoration:none;
+
+    transition:.2s;
+}
+
+.report-btn:hover{
+    background:rgba(255,255,255,.15);
+    color:white;
+    transform:translateY(-1px);
+}
+
     </style>
 
     {% block extra_css %}
@@ -294,14 +315,6 @@ body{
         </li>
 
         <li>
-            <a class="dropdown-item" href="{% url 'zglos_kolesia' %}">
-                Zgłoś kolesia
-            </a>
-        </li>
-
-
-
-        <li>
             <a class="dropdown-item" href="/wspieraj/">
                 ☕Kup mi kawę
             </a>
@@ -313,12 +326,39 @@ body{
 
 
 </div>
+{% if user.is_superuser %}
+
 <div class="nav-item ms-3 mt-3 mt-lg-0">
+    <a href="{% url 'panel_zgloszenia' %}"
+       class="report-btn">
+        📋 Zgłoszenia
+    </a>
+</div>
+
+<div class="nav-item ms-2 mt-2 mt-lg-0">
+    <a href="{% url 'dodaj_kolesia' %}"
+       class="support-btn">
+        ➕ Dodaj kolesia
+    </a>
+</div>
+
+{% else %}
+
+<div class="nav-item ms-3 mt-3 mt-lg-0">
+    <a href="{% url 'zglos_kolesia' %}"
+       class="report-btn">
+        📝 Zgłoś kolesia
+    </a>
+</div>
+
+<div class="nav-item ms-2 mt-2 mt-lg-0">
     <a href="/wspieraj/"
        class="support-btn">
         ❤️ Wspieraj projekt
     </a>
 </div>
+
+{% endif %}
         </div>
 
 
@@ -331,6 +371,23 @@ body{
 </div>
 
 </nav>
+
+{% if messages %}
+
+<div class="container mt-3">
+
+    {% for message in messages %}
+
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
 
 {% block content %}
 {% endblock %}

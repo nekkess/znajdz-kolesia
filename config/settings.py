@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
 
+from django.contrib.messages import constants as messages
+
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -123,6 +125,10 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 
 LOGIN_URL = "/logowanie/"
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}
 
 CSRF_TRUSTED_ORIGINS = [
     "https://znajdz-kolesia-production.up.railway.app",

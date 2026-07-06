@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from geopy.geocoders import Nominatim
 from cloudinary.models import CloudinaryField
 
@@ -262,3 +263,44 @@ class PersonSubmission(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.get_status_display()})"
+
+    def approve(self):
+        """Create the real Person (+ source) from this submission and
+        mark it approved. No-op if it isn't pending."""
+
+        if self.status != "pending":
+            return None
+
+        person = Person.objects.create(
+            first_name=self.first_name,
+            last_name=self.last_name,
+            position=self.position,
+            organization=self.organization,
+            city=self.city,
+            voivodeship=self.voivodeship,
+            annual_salary=self.annual_salary,
+            party=self.party,
+            description=self.description,
+            photo=self.photo,
+        )
+
+        if self.source_url:
+            PersonSource.objects.create(
+                person=person,
+                title=self.source_title or self.source_url,
+                url=self.source_url,
+            )
+
+        self.status = "approved"
+        self.reviewed_at = timezone.now()
+        self.save()
+
+        return person
+
+    def reject(self):
+        if self.status != "pending":
+            return
+
+        self.status = "rejected"
+        self.reviewed_at = timezone.now()
+        self.save()

@@ -23,16 +23,22 @@ from django.db.models import (
     ExpressionWrapper
 )
 
-from .forms import RegisterForm, PersonSubmissionForm
-from .models import PersonSubmission
+from .forms import RegisterForm, PersonSubmissionForm, PersonForm, LoginForm
+from .models import PersonSubmission, PersonSource
 from django.contrib.auth.models import User
 
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import user_passes_test
+from django.contrib import messages
+from django.views.decorators.http import require_POST
 
 from django.shortcuts import redirect
 from django.contrib.auth import logout
+
+
+def is_superuser(user):
+    return user.is_superuser
 
 
 
@@ -285,7 +291,7 @@ def login_view(request):
 
     if request.method == "POST":
 
-        form = AuthenticationForm(
+        form = LoginForm(
             request,
             data=request.POST
         )
@@ -300,7 +306,7 @@ def login_view(request):
 
     else:
 
-        form = AuthenticationForm()
+        form = LoginForm()
 
     return render(
         request,
@@ -370,3 +376,128 @@ def vote_person(request, person_id, vote):
         "downvotes": person.downvotes,
         "approval": person.approval_percent,
     })
+
+
+@user_passes_test(is_superuser, login_url="/")
+def dodaj_kolesia(request):
+
+    if request.method == "POST":
+        form = PersonForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            person = form.save()
+
+            source_url = form.cleaned_data.get("source_url")
+
+            if source_url:
+                PersonSource.objects.create(
+                    person=person,
+                    title=form.cleaned_data.get("source_title") or source_url,
+                    url=source_url,
+                )
+
+            messages.success(
+                request,
+                f"Dodano {person.first_name} {person.last_name}."
+            )
+            return redirect("edytuj_kolesia", person_id=person.id)
+
+    else:
+        form = PersonForm()
+
+    return render(
+        request,
+        "kolesia_form.html",
+        {
+            "form": form,
+            "is_edit": False,
+        }
+    )
+
+
+@user_passes_test(is_superuser, login_url="/")
+def edytuj_kolesia(request, person_id):
+
+    person = get_object_or_404(Person, id=person_id)
+
+    if request.method == "POST":
+        form = PersonForm(request.POST, request.FILES, instance=person)
+
+        if form.is_valid():
+            form.save()
+
+            source_url = form.cleaned_data.get("source_url")
+
+            if source_url:
+                PersonSource.objects.get_or_create(
+                    person=person,
+                    url=source_url,
+                    defaults={
+                        "title": form.cleaned_data.get("source_title") or source_url
+                    },
+                )
+
+            messages.success(
+                request,
+                f"Zaktualizowano {person.first_name} {person.last_name}."
+            )
+            return redirect("edytuj_kolesia", person_id=person.id)
+
+    else:
+        form = PersonForm(instance=person)
+
+    return render(
+        request,
+        "kolesia_form.html",
+        {
+            "form": form,
+            "is_edit": True,
+            "person": person,
+        }
+    )
+
+
+@user_passes_test(is_superuser, login_url="/")
+@require_POST
+def usun_kolesia(request, person_id):
+
+    person = get_object_or_404(Person, id=person_id)
+    name = f"{person.first_name} {person.last_name}"
+    person.delete()
+
+    messages.success(request, f"Usunięto {name}.")
+    return redirect("/")
+
+
+@user_passes_test(is_superuser, login_url="/")
+def panel_zgloszenia(request):
+
+    if request.method == "POST":
+        submission = get_object_or_404(
+            PersonSubmission,
+            id=request.POST.get("submission_id")
+        )
+
+        if request.POST.get("action") == "approve":
+            submission.approve()
+            messages.success(
+                request,
+                f"Zaakceptowano {submission.first_name} {submission.last_name}."
+            )
+        elif request.POST.get("action") == "reject":
+            submission.reject()
+            messages.info(
+                request,
+                f"Odrzucono {submission.first_name} {submission.last_name}."
+            )
+
+        return redirect("panel_zgloszenia")
+
+    return render(
+        request,
+        "panel_zgloszenia.html",
+        {
+            "pending": PersonSubmission.objects.filter(status="pending"),
+            "recent": PersonSubmission.objects.exclude(status="pending")[:10],
+        }
+    )

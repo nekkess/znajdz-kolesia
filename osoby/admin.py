@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils import timezone
 
 from .models import (
     Person,
@@ -57,30 +56,7 @@ class PersonSubmissionAdmin(admin.ModelAdmin):
         approved = 0
 
         for submission in queryset.filter(status="pending"):
-
-            person = Person.objects.create(
-                first_name=submission.first_name,
-                last_name=submission.last_name,
-                position=submission.position,
-                organization=submission.organization,
-                city=submission.city,
-                voivodeship=submission.voivodeship,
-                annual_salary=submission.annual_salary,
-                party=submission.party,
-                description=submission.description,
-                photo=submission.photo,
-            )
-
-            if submission.source_url:
-                PersonSource.objects.create(
-                    person=person,
-                    title=submission.source_title or submission.source_url,
-                    url=submission.source_url,
-                )
-
-            submission.status = "approved"
-            submission.reviewed_at = timezone.now()
-            submission.save()
+            submission.approve()
             approved += 1
 
         self.message_user(request, f"Zaakceptowano {approved} zgloszen.")
@@ -88,11 +64,12 @@ class PersonSubmissionAdmin(admin.ModelAdmin):
     approve_submissions.short_description = "Zatwierdz wybrane zgloszenia"
 
     def reject_submissions(self, request, queryset):
-        updated = queryset.filter(status="pending").update(
-            status="rejected",
-            reviewed_at=timezone.now(),
-        )
+        rejected = 0
 
-        self.message_user(request, f"Odrzucono {updated} zgloszen.")
+        for submission in queryset.filter(status="pending"):
+            submission.reject()
+            rejected += 1
+
+        self.message_user(request, f"Odrzucono {rejected} zgloszen.")
 
     reject_submissions.short_description = "Odrzuc wybrane zgloszenia"

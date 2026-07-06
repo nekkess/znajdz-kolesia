@@ -15,6 +15,10 @@ from .views import (
     vote_person,
     logout_view,
     zglos_kolesia,
+    dodaj_kolesia,
+    edytuj_kolesia,
+    usun_kolesia,
+    panel_zgloszenia,
 )
 
 urlpatterns = [
@@ -37,7 +41,8 @@ urlpatterns = [
     ),
     path(
     "logowanie/",
-    login_view),
+    login_view,
+    name="logowanie"),
     path("faq/",faq),
     path("o-nas/", about),
     path("kontakt/", contact),
@@ -55,6 +60,26 @@ path(
     "zglos-kolesia/",
     zglos_kolesia,
     name="zglos_kolesia"
+),
+path(
+    "dodaj-kolesia/",
+    dodaj_kolesia,
+    name="dodaj_kolesia"
+),
+path(
+    "edytuj-kolesia/<int:person_id>/",
+    edytuj_kolesia,
+    name="edytuj_kolesia"
+),
+path(
+    "usun-kolesia/<int:person_id>/",
+    usun_kolesia,
+    name="usun_kolesia"
+),
+path(
+    "panel/zgloszenia/",
+    panel_zgloszenia,
+    name="panel_zgloszenia"
 ),
 
 

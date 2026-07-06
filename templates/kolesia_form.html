@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if is_edit %}Edytuj kolesia{% else %}Dodaj kolesia{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.report-card{
+    border:none;
+    border-radius:20px;
+    box-shadow:0 15px 45px rgba(0,0,0,.1);
+    overflow:hidden;
+}
+
+.report-card .card-header{
+    background:#212529;
+    color:white;
+    border:none;
+    padding:32px;
+}
+
+.report-card .card-header h2{
+    font-weight:800;
+    margin:0;
+}
+
+.report-card .card-body{
+    padding:32px;
+}
+
+.report-card .btn-danger{
+    border-radius:12px;
+    padding:12px;
+    font-weight:700;
+}
+
+.form-floating > label{
+    color:#6c757d;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-10 col-lg-8">
+
+            <div class="card report-card">
+
+                <div class="card-header">
+                    <h2>
+                        {% if is_edit %}
+                            ✏️ Edytuj: {{ person.first_name }} {{ person.last_name }}
+                        {% else %}
+                            ➕ Dodaj kolesia
+                        {% endif %}
+                    </h2>
+                </div>
+
+                <div class="card-body">
+
+                    <form method="post" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        {% include "components/person_fields.html" %}
+
+                        <div class="d-flex gap-2 mt-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger flex-grow-1">
+
+                                {% if is_edit %}Zapisz zmiany{% else %}Dodaj{% endif %}
+
+                            </button>
+
+                            {% if is_edit %}
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-dark"
+                                onclick="if(confirm('Na pewno usunąć {{ person.first_name }} {{ person.last_name }}? Tej operacji nie da się cofnąć.')){document.getElementById('delete-form').submit();}">
+
+                                🗑️ Usuń
+
+                            </button>
+
+                            {% endif %}
+
+                        </div>
+
+                    </form>
+
+                    {% if is_edit %}
+
+                    <form
+                        id="delete-form"
+                        method="post"
+                        action="{% url 'usun_kolesia' person.id %}"
+                        class="d-none">
+                        {% csrf_token %}
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

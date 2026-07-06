@@ -1,0 +1,98 @@
+{% for error in form.non_field_errors %}
+<div class="alert alert-danger py-2">{{ error }}</div>
+{% endfor %}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.first_name }}
+            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+            {% for error in form.first_name.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.last_name }}
+            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+            {% for error in form.last_name.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.position }}
+            <label for="{{ form.position.id_for_label }}">{{ form.position.label }}</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.organization }}
+            <label for="{{ form.organization.id_for_label }}">{{ form.organization.label }}</label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.city }}
+            <label for="{{ form.city.id_for_label }}">{{ form.city.label }}</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.voivodeship }}
+            <label for="{{ form.voivodeship.id_for_label }}">{{ form.voivodeship.label }}</label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.annual_salary }}
+            <label for="{{ form.annual_salary.id_for_label }}">{{ form.annual_salary.label }}</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.party }}
+            <label for="{{ form.party.id_for_label }}">{{ form.party.label }}</label>
+        </div>
+    </div>
+</div>
+
+<div class="form-floating mb-3">
+    {{ form.description }}
+    <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+    {% for error in form.description.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+</div>
+
+<div class="mb-3">
+    <label for="{{ form.photo.id_for_label }}" class="form-label text-muted small">
+        {{ form.photo.label }}
+    </label>
+    {{ form.photo }}
+</div>
+
+<hr class="my-4">
+
+<p class="text-muted small mb-2">Źródło{% if is_edit %} (opcjonalnie - dodaje kolejne, istniejące zarządzasz w panelu admina){% endif %}</p>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="form-floating mb-3">
+            {{ form.source_title }}
+            <label for="{{ form.source_title.id_for_label }}">{{ form.source_title.label }}</label>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="form-floating mb-3">
+            {{ form.source_url }}
+            <label for="{{ form.source_url.id_for_label }}">{{ form.source_url.label }}</label>
+            {% for error in form.source_url.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+        </div>
+    </div>
+</div>

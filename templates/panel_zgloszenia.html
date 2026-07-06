@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}
+Panel zgłoszeń
+{% endblock %}
+
+{% block extra_css %}
+<style>
+
+.submission-card{
+    border:none;
+    border-radius:16px;
+    box-shadow:0 5px 20px rgba(0,0,0,.06);
+    margin-bottom:20px;
+}
+
+.submission-card .card-body{
+    padding:24px;
+}
+
+.submission-meta{
+    color:#6c757d;
+    font-size:.9rem;
+}
+
+.status-badge-approved{
+    background:#198754;
+}
+
+.status-badge-rejected{
+    background:#6c757d;
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 mb-5">
+
+    <h1 class="mb-4">
+        📋 Panel zgłoszeń
+    </h1>
+
+    <h4 class="mb-3">
+        Oczekujące ({{ pending|length }})
+    </h4>
+
+    {% if pending %}
+
+    {% for submission in pending %}
+
+    <div class="card submission-card">
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+
+                <div>
+
+                    <h5 class="fw-bold mb-1">
+                        {{ submission.first_name }} {{ submission.last_name }}
+                    </h5>
+
+                    <p class="mb-1">
+                        {{ submission.position }}
+                        {% if submission.organization %} - {{ submission.organization }}{% endif %}
+                    </p>
+
+                    {% if submission.city %}
+                    <p class="submission-meta mb-1">📍 {{ submission.city }}</p>
+                    {% endif %}
+
+                    {% if submission.annual_salary %}
+                    <p class="submission-meta mb-1">💰 {{ submission.annual_salary }} zł/rok</p>
+                    {% endif %}
+
+                    <p class="mb-2">{{ submission.description|truncatewords:40 }}</p>
+
+                    {% if submission.source_url %}
+                    <a href="{{ submission.source_url }}" target="_blank" class="small">
+                        🔗 {{ submission.source_title|default:submission.source_url }}
+                    </a>
+                    {% endif %}
+
+                    <p class="submission-meta mt-2 mb-0">
+                        Zgłosił: {{ submission.submitted_by.username }} •
+                        {{ submission.created_at|date:"d.m.Y H:i" }}
+                    </p>
+
+                </div>
+
+                <div class="d-flex flex-column gap-2">
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="submission_id" value="{{ submission.id }}">
+                        <input type="hidden" name="action" value="approve">
+                        <button type="submit" class="btn btn-success w-100">
+                            ✅ Zatwierdź
+                        </button>
+                    </form>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="submission_id" value="{{ submission.id }}">
+                        <input type="hidden" name="action" value="reject">
+                        <button type="submit" class="btn btn-outline-danger w-100">
+                            ❌ Odrzuć
+                        </button>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+    {% else %}
+
+    <div class="alert alert-info">
+        Brak oczekujących zgłoszeń.
+    </div>
+
+    {% endif %}
+
+    {% if recent %}
+
+    <h4 class="mb-3 mt-5">
+        Ostatnio rozpatrzone
+    </h4>
+
+    <div class="card submission-card">
+        <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr>
+                        <th>Osoba</th>
+                        <th>Zgłosił</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in recent %}
+                    <tr>
+                        <td>{{ submission.first_name }} {{ submission.last_name }}</td>
+                        <td>{{ submission.submitted_by.username }}</td>
+                        <td>
+                            <span class="badge {% if submission.status == 'approved' %}status-badge-approved{% else %}status-badge-rejected{% endif %}">
+                                {{ submission.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ submission.reviewed_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
