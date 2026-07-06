@@ -643,6 +643,48 @@ function copyPersonLink(url, btn) {
         }, 2000);
     });
 }
+
+window.vote = function(personId, value) {
+
+    fetch(`/vote/${personId}/${value}/`)
+    .then(response => {
+
+        if (response.status === 403) {
+
+            alert(
+                "Musisz się zalogować, aby głosować."
+            );
+
+            window.location.href = "/logowanie/";
+
+            return null;
+        }
+
+        return response.json();
+
+    })
+    .then(data => {
+
+        if (!data) return;
+
+        document.getElementById("upvotes").textContent =
+            data.upvotes;
+
+        document.getElementById("downvotes").textContent =
+            data.downvotes;
+
+        document.getElementById("approval").textContent =
+            data.approval + "% poparcia";
+
+        document.getElementById("vote-message").style.display =
+            "block";
+
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+};
 </script>
 
 </body>
