@@ -217,11 +217,30 @@ body{
     background:#e10600;
 }
 
-.info-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+.photo-info-stack{
+    display:flex;
+    flex-direction:column;
     gap:12px;
+    margin-top:16px;
+}
+
+.salary-highlight{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    background:#f0fdf4;
+    border-radius:16px;
+    padding:20px 24px;
     margin-top:20px;
+}
+
+.salary-highlight .info-icon{
+    font-size:2.6rem;
+}
+
+.salary-highlight .info-value{
+    font-size:2.1rem;
+    font-weight:800;
 }
 
 .info-item{
@@ -253,12 +272,6 @@ body{
 
 .info-value.salary{
     color:#198754;
-}
-
-@media (max-width:576px){
-    .info-grid{
-        grid-template-columns:1fr;
-    }
 }
 
 .membership-card{
