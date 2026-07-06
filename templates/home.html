@@ -423,11 +423,12 @@ document.body.classList.add("home-page");
 
            <div class="admin-overlay">
 
-               <a href="{% url 'edytuj_kolesia' person.id %}"
-                  onclick="event.stopPropagation();"
-                  title="Edytuj">
+               <button
+                   type="button"
+                   title="Edytuj"
+                   onclick="event.stopPropagation(); event.preventDefault(); window.location.href='{% url 'edytuj_kolesia' person.id %}';">
                    ✏️
-               </a>
+               </button>
 
                <button
                    type="button"
