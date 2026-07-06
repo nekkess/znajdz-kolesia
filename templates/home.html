@@ -237,6 +237,39 @@ url("/static/images/sejm-sala-plenarna.jpeg");
     color:#198754;
 }
 
+        .person-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.salary-box {
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.approval-pill {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: .75rem;
+    font-weight: 700;
+    white-space: nowrap;
+    color: white;
+    flex-shrink: 0;
+}
+
+.approval-pill.approval-good {
+    background: #198754;
+}
+
+.approval-pill.approval-bad {
+    background: #dc3545;
+}
+
+.approval-pill.approval-neutral {
+    background: #adb5bd;
+}
+
 
 </style>
 {% endblock %}
@@ -504,12 +537,26 @@ document.body.classList.add("home-page");
 
             <div class="card-body">
 
-                <h5 class="fw-bold">
-                    {{ person.first_name }}
-                    {{ person.last_name }}
-                </h5>
+                <div class="d-flex justify-content-between align-items-start gap-2">
 
-                <p class="text-muted mb-2">
+                    <h5 class="fw-bold mb-0">
+                        {{ person.first_name }}
+                        {{ person.last_name }}
+                    </h5>
+
+                    {% if person.upvotes or person.downvotes %}
+                        <span class="approval-pill {% if person.approval_percent >= 50 %}approval-good{% else %}approval-bad{% endif %}">
+                            {{ person.approval_percent }}% poparcia
+                        </span>
+                    {% else %}
+                        <span class="approval-pill approval-neutral">
+                            brak głosów
+                        </span>
+                    {% endif %}
+
+                </div>
+
+                <p class="text-muted mb-2 mt-2">
                     {{ person.position }}
                 </p>
 
@@ -543,6 +590,20 @@ document.body.classList.add("home-page");
         {{ person.salary_min|floatformat:0|intcomma }}
         -
         {{ person.salary_max|floatformat:0|intcomma }} zł
+    </div>
+
+</div>
+
+{% else %}
+
+<div class="salary-box">
+
+    <div class="salary-label">
+        Roczne wynagrodzenie:
+    </div>
+
+    <div class="salary-value" style="color:#6c757d;">
+        Brak danych
     </div>
 
 </div>
