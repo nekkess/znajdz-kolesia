@@ -116,6 +116,15 @@
                     {{ membership.party.name }}
                 </h5>
 
+                {% if membership.family_relation %}
+
+                <p class="mb-1">
+                    <strong>Powiązanie rodzinne:</strong>
+                    {{ membership.family_relation }}
+                </p>
+
+                {% else %}
+
                 <p class="mb-1">
 
                     <strong>Okres:</strong>
@@ -131,6 +140,8 @@
                     {% endif %}
 
                 </p>
+
+                {% endif %}
 
                 {% if membership.position %}
                 <p class="mb-1">

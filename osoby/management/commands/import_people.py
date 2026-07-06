@@ -111,6 +111,7 @@ class Command(BaseCommand):
                 defaults={
                     "position": membership.get("position", ""),
                     "description": membership.get("description", ""),
+                    "family_relation": membership.get("family_relation", ""),
                 },
             )
 

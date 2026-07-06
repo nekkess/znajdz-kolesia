@@ -171,6 +171,15 @@ class PartyMembership(models.Model):
     start_year = models.IntegerField()
     end_year = models.IntegerField(null=True, blank=True)
 
+    family_relation = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name="Powiązanie rodzinne",
+        help_text="Np. 'szwagierka', 'syn', 'żona'. Wypełnij zamiast "
+                  "traktować osobę jako formalnego członka partii - "
+                  "wyświetli się zamiast okresu przynależności."
+    )
+
     position = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
 
