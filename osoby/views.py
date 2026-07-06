@@ -89,6 +89,13 @@ def home(request):
     elif sort == "za":
 
         people = people.order_by("-last_name", "-first_name")
+
+    elif sort == "controversial":
+
+        people = people.annotate(
+            downvote_count=Count("votes", filter=Q(votes__vote=-1))
+        ).order_by("-downvote_count")
+
     salary_sum = Person.objects.annotate(
         effective_salary=Coalesce(
             "annual_salary",
@@ -135,6 +142,16 @@ def person_detail(request, person_id):
         "person_detail.html",
         {"person": person}
     )
+
+def losowy_koles(request):
+
+    person = Person.objects.order_by("?").first()
+
+    if not person:
+        return redirect("/")
+
+    return redirect("person_detail", person_id=person.id)
+
 
 def parties_ranking(request):
 

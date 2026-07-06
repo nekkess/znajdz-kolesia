@@ -1,43 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
-{{ person.first_name }} {{ person.last_name }}
+{{ person.first_name }} {{ person.last_name }} - Tracker Kolesiostwa
+{% endblock %}
+
+{% block extra_meta %}
+<meta property="og:title" content="{{ person.first_name }} {{ person.last_name }}{% if person.position %} - {{ person.position }}{% endif %}">
+<meta property="og:description" content="{{ person.position }}{% if person.organization %} w {{ person.organization }}{% endif %}.{% if person.salary_display != "Brak danych" %} Wynagrodzenie: {{ person.salary_display }}.{% endif %}">
+<meta property="og:type" content="profile">
+<meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+{% if person.photo %}
+<meta property="og:image" content="{{ person.photo.url }}">
+{% else %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo_tracker_kolesiostwa.png' %}">
+{% endif %}
+<meta name="twitter:card" content="summary_large_image">
 {% endblock %}
 
 {% block content %}
 
 <div class="container mt-5">
 
-    <h1>
-        {{ person.first_name }}
-        {{ person.last_name }}
-    </h1>
-
-    <hr>
-
-    <p>
-        <strong>Stanowisko:</strong>
-        {{ person.position }}
-    </p>
-
-    <p>
-        <strong>Organizacja:</strong>
-        {{ person.organization }}
-    </p>
-
-    <p>
-        <strong>Miasto:</strong>
-        {{ person.city }}
-    </p>
-
-    <p>
-        <strong>Wynagrodzenie:</strong>
-        {{ person.annual_salary }}
-    </p>
-
-    <p>
-        {{ person.description }}
-    </p>
+    {% include "components/person_modal_content.html" %}
 
 </div>
 

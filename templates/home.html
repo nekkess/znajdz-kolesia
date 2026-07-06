@@ -266,7 +266,7 @@ document.body.classList.add("home-page");
 
         <div class="row justify-content-center mt-5">
 
-    <div class="col-md-6 col-lg-4 mb-3">
+    <div class="col-md-6 col-lg-3 mb-3">
         <a href="/mapa/"
            class="btn btn-light btn-lg w-100 py-4 fw-bold">
             🗺️ Mapa Kolesi
@@ -275,7 +275,7 @@ document.body.classList.add("home-page");
 
 
 
-    <div class="col-md-6 col-lg-4 mb-3">
+    <div class="col-md-6 col-lg-3 mb-3">
         <a href="/partie/"
            class="btn btn-light btn-lg w-100 py-4 fw-bold">
             🏛️ Ranking Partii
@@ -284,10 +284,17 @@ document.body.classList.add("home-page");
 
 
 
-    <div class="col-md-6 col-lg-4 mb-3">
+    <div class="col-md-6 col-lg-3 mb-3">
         <a href="/#wyszukiwarka"
            class="btn btn-light btn-lg w-100 py-4 fw-bold">
             🔎 Wyszukiwarka
+        </a>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-3">
+        <a href="/losowy-koles/"
+           class="btn btn-light btn-lg w-100 py-4 fw-bold">
+            🎲 Losowy Koleś
         </a>
     </div>
 
@@ -423,6 +430,11 @@ document.body.classList.add("home-page");
 <a href="?q={{ query }}&sort={% if sort == 'az' %}za{% else %}az{% endif %}#wyszukiwarka"
    class="btn btn-outline-dark">
     A-Z {% if sort == 'az' %}↓{% elif sort == 'za' %}↑{% endif %}
+</a>
+
+<a href="?q={{ query }}&sort=controversial#wyszukiwarka"
+   class="btn btn-outline-dark">
+    🔥 Najbardziej kontrowersyjni
 </a>
     </div>
 

@@ -80,6 +80,40 @@
 
         </div>
 
+        {% url 'person_detail' person.id as person_path %}
+        {% with absolute_url=request.scheme|add:"://"|add:request.get_host|add:person_path %}
+
+        <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+
+            <span class="fw-bold me-1">Udostępnij:</span>
+
+            <button
+                type="button"
+                class="btn btn-outline-secondary btn-sm"
+                onclick="copyPersonLink('{{ absolute_url }}', this)">
+                🔗 Kopiuj link
+            </button>
+
+            <a
+                class="btn btn-outline-secondary btn-sm"
+                target="_blank"
+                rel="noopener"
+                href="https://twitter.com/intent/tweet?url={{ absolute_url|urlencode }}&text={{ person.first_name }}%20{{ person.last_name }}%20-%20{{ person.position|urlencode }}">
+                🐦 X
+            </a>
+
+            <a
+                class="btn btn-outline-secondary btn-sm"
+                target="_blank"
+                rel="noopener"
+                href="https://www.facebook.com/sharer/sharer.php?u={{ absolute_url|urlencode }}">
+                📘 Facebook
+            </a>
+
+        </div>
+
+        {% endwith %}
+
         <hr>
 
         <p>
