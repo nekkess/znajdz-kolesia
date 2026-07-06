@@ -23,7 +23,9 @@ from django.db.models import (
     ExpressionWrapper
 )
 
-from .forms import RegisterForm
+from .forms import RegisterForm, PersonSubmissionForm
+from .models import PersonSubmission
+from django.contrib.auth.models import User
 
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
@@ -197,9 +199,58 @@ def mapa(request):
 
 
 def ranking_users(request):
+
+    users = User.objects.annotate(
+        approved_count=Count(
+            "submissions",
+            filter=Q(submissions__status="approved")
+        )
+    ).filter(approved_count__gt=0).order_by("-approved_count")
+
+    ranking = [
+        {
+            "user": u,
+            "count": u.approved_count,
+            "points": u.approved_count * PersonSubmission.POINTS_PER_APPROVAL,
+        }
+        for u in users
+    ]
+
     return render(
         request,
-        "ranking_users.html"
+        "ranking_users.html",
+        {
+            "ranking": ranking
+        }
+    )
+
+
+@login_required
+def zglos_kolesia(request):
+
+    success = False
+
+    if request.method == "POST":
+        form = PersonSubmissionForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            submission = form.save(commit=False)
+            submission.submitted_by = request.user
+            submission.save()
+
+            form = PersonSubmissionForm()
+            success = True
+
+    else:
+        form = PersonSubmissionForm()
+
+    return render(
+        request,
+        "zglos_kolesia.html",
+        {
+            "form": form,
+            "success": success,
+        }
     )
 
 

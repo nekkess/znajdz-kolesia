@@ -12,9 +12,54 @@ Ranking Użytkowników
         🏆 Ranking Użytkowników
     </h1>
 
-    <div class="alert alert-info">
-        Funkcja w budowie.
+    <p class="text-muted">
+        Punkty przyznawane są za zaakceptowane zgłoszenia kolesi
+        (10 punktów za każde).
+        <a href="{% url 'zglos_kolesia' %}">Zgłoś kolesia</a>
+        i wejdź do rankingu.
+    </p>
+
+    {% if ranking %}
+
+    <div class="card shadow-sm border-0">
+
+        <table class="table table-hover mb-0">
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Użytkownik</th>
+                    <th>Zaakceptowane zgłoszenia</th>
+                    <th>Punkty</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for entry in ranking %}
+
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ entry.user.username }}</td>
+                    <td>{{ entry.count }}</td>
+                    <td class="fw-bold">{{ entry.points }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
     </div>
+
+    {% else %}
+
+    <div class="alert alert-info">
+        Nikt jeszcze nie zdobył punktów. Bądź pierwszy!
+    </div>
+
+    {% endif %}
 
 </div>
 

@@ -13,7 +13,8 @@ from .views import (
     contact,
     support,
     vote_person,
-logout_view
+    logout_view,
+    zglos_kolesia,
 )
 
 urlpatterns = [
@@ -49,6 +50,11 @@ path(
 path(
     "wylogowanie/",
     logout_view
+),
+path(
+    "zglos-kolesia/",
+    zglos_kolesia,
+    name="zglos_kolesia"
 ),
 
 

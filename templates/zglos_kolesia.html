@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}
+Zgłoś kolesia
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-9 col-lg-7">
+
+            <div class="card shadow border-0">
+
+                <div class="card-body p-4">
+
+                    <h2 class="mb-3">
+                        📝 Zgłoś kolesia
+                    </h2>
+
+                    <p class="text-muted">
+                        Znasz przypadek osoby zatrudnionej dzięki znajomościom
+                        lub powiązaniom politycznym? Zgłoś ją tutaj wraz ze
+                        źródłem. Każde zgłoszenie jest ręcznie weryfikowane
+                        przed dodaniem do bazy. Za zaakceptowane zgłoszenie
+                        dostajesz punkty liczone w rankingu użytkowników.
+                    </p>
+
+                    {% if success %}
+
+                    <div class="alert alert-success">
+                        Dziękujemy! Zgłoszenie zostało wysłane do weryfikacji.
+                    </div>
+
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        {{ form.as_p }}
+
+                        <button
+                            type="submit"
+                            class="btn btn-danger w-100 mt-2">
+
+                            Wyślij zgłoszenie
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

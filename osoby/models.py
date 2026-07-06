@@ -201,3 +201,64 @@ class PersonVote(models.Model):
 
     class Meta:
         unique_together = ("person", "user")
+
+
+class PersonSubmission(models.Model):
+    POINTS_PER_APPROVAL = 10
+
+    STATUS_CHOICES = [
+        ("pending", "Oczekujące"),
+        ("approved", "Zaakceptowane"),
+        ("rejected", "Odrzucone"),
+    ]
+
+    submitted_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="submissions"
+    )
+
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+
+    position = models.CharField(max_length=255, blank=True)
+    organization = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+
+    voivodeship = models.CharField(
+        max_length=50,
+        choices=VOIVODESHIPS,
+        blank=True
+    )
+
+    annual_salary = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
+
+    party = models.CharField(max_length=200, blank=True)
+
+    description = models.TextField(verbose_name="Opis powiązania")
+
+    photo = CloudinaryField('image', blank=True, null=True)
+
+    source_title = models.CharField(max_length=255, blank=True)
+    source_url = models.URLField(verbose_name="Link do źródła")
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default="pending"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    admin_note = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.get_status_display()})"
