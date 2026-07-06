@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load photo_extras %}
 
 {% block title %}
 {{ person.first_name }} {{ person.last_name }} - Znajdź Kolesia
@@ -11,7 +12,7 @@
 <meta property="og:type" content="profile">
 <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
 {% if person.photo %}
-<meta property="og:image" content="{{ person.photo.url }}">
+<meta property="og:image" content="{{ person.photo|face_crop:'1200x630' }}">
 {% else %}
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo_tracker_kolesiostwa.png' %}">
 {% endif %}

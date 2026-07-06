@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load humanize %}
+{% load photo_extras %}
 
 {% block title %}
 Mapa Kolesi
@@ -31,7 +32,7 @@ Mapa Kolesi
     width: 100%;
     height: 250px;
     object-fit: cover;
-    object-position: center 25%;
+    object-position: center;
     border-radius: 10px;
 }
 
@@ -293,7 +294,7 @@ marker{{ person.id }}.on('click', function() {
 
             {% if person.photo %}
                 <img
-                    src="{{ person.photo.url }}"
+                    src="{{ person.photo|face_crop:'400x250' }}"
                     class="profile-photo">
             {% else %}
                 <div class="profile-photo d-flex align-items-center justify-content-center bg-light">
@@ -363,7 +364,7 @@ marker{{ person.id }}.on('click', function() {
 
     const mobilePhoto = document.getElementById('mobileMarkerPhoto');
     {% if person.photo %}
-        mobilePhoto.src = "{{ person.photo.url }}";
+        mobilePhoto.src = "{{ person.photo|face_crop:'150x150' }}";
         mobilePhoto.style.display = "block";
     {% else %}
         mobilePhoto.style.display = "none";

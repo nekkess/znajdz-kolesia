@@ -1,4 +1,5 @@
 {% load humanize %}
+{% load photo_extras %}
 
 <div class="container-fluid">
 
@@ -9,7 +10,7 @@
 
         {% if person.photo %}
             <img
-                src="{{ person.photo.url }}"
+                src="{{ person.photo|face_crop:'400x320' }}"
                 class="modal-person-photo rounded shadow-sm">
         {% else %}
             <div class="modal-person-photo modal-person-photo-placeholder rounded shadow-sm d-flex align-items-center justify-content-center bg-light">
@@ -172,46 +173,47 @@
 
             <div class="card-body">
 
-                <h5>
+                <h5 class="membership-party-name">
                     {{ membership.party.name }}
                 </h5>
 
-                {% if membership.family_relation %}
+                <div class="membership-meta">
 
-                <p class="mb-1">
-                    <strong>Powiązanie rodzinne:</strong>
-                    {{ membership.family_relation }}
-                </p>
+                    {% if membership.family_relation %}
 
-                {% else %}
+                    <div>
+                        <div class="info-label">Powiązanie rodzinne</div>
+                        <div class="info-value">{{ membership.family_relation }}</div>
+                    </div>
 
-                <p class="mb-1">
-
-                    <strong>Okres:</strong>
-
-                    {{ membership.start_year }}
-
-                    -
-
-                    {% if membership.end_year %}
-                        {{ membership.end_year }}
                     {% else %}
-                        obecnie
+
+                    <div>
+                        <div class="info-label">Okres</div>
+                        <div class="info-value">
+                            {{ membership.start_year }}
+                            -
+                            {% if membership.end_year %}
+                                {{ membership.end_year }}
+                            {% else %}
+                                obecnie
+                            {% endif %}
+                        </div>
+                    </div>
+
                     {% endif %}
 
-                </p>
+                    {% if membership.position %}
+                    <div>
+                        <div class="info-label">Funkcja</div>
+                        <div class="info-value">{{ membership.position }}</div>
+                    </div>
+                    {% endif %}
 
-                {% endif %}
-
-                {% if membership.position %}
-                <p class="mb-1">
-                    <strong>Funkcja:</strong>
-                    {{ membership.position }}
-                </p>
-                {% endif %}
+                </div>
 
                 {% if membership.description %}
-                <p class="mb-0">
+                <p class="mb-0 mt-3">
                     {{ membership.description }}
                 </p>
                 {% endif %}
