@@ -140,12 +140,18 @@ def person_detail(request, person_id):
     return render(
         request,
         "person_detail.html",
-        {"person": person}
+        {"person": person, "show_reroll": True}
     )
 
 def losowy_koles(request):
 
-    person = Person.objects.order_by("?").first()
+    people = Person.objects.all()
+
+    exclude_id = request.GET.get("exclude")
+    if exclude_id:
+        people = people.exclude(id=exclude_id)
+
+    person = people.order_by("?").first() or Person.objects.order_by("?").first()
 
     if not person:
         return redirect("/")

@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{% block title %}Tracker Kolesiostwa{% endblock %}</title>
+    <title>{% block title %}Znajdź Kolesia{% endblock %}</title>
 
     {% block extra_meta %}
-    <meta property="og:title" content="Tracker Kolesiostwa">
+    <meta property="og:title" content="Znajdź Kolesia">
     <meta property="og:description" content="Projekt społeczny dokumentujący osoby pełniące funkcje publiczne oraz ich powiązania zawodowe i polityczne.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
@@ -187,10 +187,86 @@ body{
     height:320px;
     object-fit:cover;
     display:block;
+    border-radius:18px !important;
 }
 
 .modal-person-photo-placeholder{
     height:320px;
+}
+
+.profile-party-badge{
+    background:#e10600;
+    border-radius:999px;
+    padding:.4em .9em;
+}
+
+.profile-section-title{
+    font-weight:800;
+    margin-bottom:16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.profile-section-title::before{
+    content:"";
+    display:inline-block;
+    width:6px;
+    height:24px;
+    border-radius:4px;
+    background:#e10600;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:20px;
+}
+
+.info-item{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:#f8f9fa;
+    border-radius:14px;
+    padding:14px 16px;
+}
+
+.info-icon{
+    font-size:1.4rem;
+    line-height:1.2;
+}
+
+.info-label{
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:#6c757d;
+    font-weight:700;
+}
+
+.info-value{
+    font-weight:600;
+    color:#212529;
+}
+
+.info-value.salary{
+    color:#198754;
+}
+
+@media (max-width:576px){
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+.membership-card{
+    border:none;
+    border-left:4px solid #e10600;
+    border-radius:14px;
+    background:#fff;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
 }
 
         .support-btn{
