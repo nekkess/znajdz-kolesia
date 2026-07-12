@@ -121,16 +121,26 @@ class Person(models.Model):
 
     @property
     def share_summary(self):
-        text = f"{self.first_name} {self.last_name}"
+        name_line = f"{self.first_name} {self.last_name}"
+        if self.position:
+            name_line += f" - {self.position}"
 
-        role_bits = [bit for bit in (self.position, self.organization) if bit]
-        if role_bits:
-            text += " - " + ", ".join(role_bits)
+        lines = [name_line]
+
+        if self.organization:
+            lines.append(self.organization)
 
         if self.salary_display != "Brak danych":
-            text += f" 💰 {self.salary_display}"
+            lines.append(f"💰 {self.salary_display}")
 
-        return text
+        membership = self.memberships.last()
+        if membership:
+            party_line = f"Partia: {membership.party.name}"
+            if membership.position:
+                party_line += f" - {membership.position}"
+            lines.append(party_line)
+
+        return "\n".join(lines)
 
     @property
     def upvotes(self):
