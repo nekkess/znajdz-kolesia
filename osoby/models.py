@@ -128,16 +128,17 @@ class Person(models.Model):
         lines = [name_line]
 
         if self.organization:
-            lines.append(self.organization)
+            lines.append(f"Organizacja: {self.organization}")
 
         if self.salary_display != "Brak danych":
-            lines.append(f"💰 {self.salary_display}")
+            lines.append(f"💰 Wynagrodzenie roczne: {self.salary_display}")
 
         membership = self.memberships.last()
         if membership:
             party_line = f"Partia: {membership.party.name}"
-            if membership.position:
-                party_line += f" - {membership.position}"
+            role = membership.position or membership.family_relation
+            if role:
+                party_line += f" - {role}"
             lines.append(party_line)
 
         return "\n".join(lines)
