@@ -120,6 +120,19 @@ class Person(models.Model):
         return membership.party.name if membership else ""
 
     @property
+    def share_summary(self):
+        text = f"{self.first_name} {self.last_name}"
+
+        role_bits = [bit for bit in (self.position, self.organization) if bit]
+        if role_bits:
+            text += " - " + ", ".join(role_bits)
+
+        if self.salary_display != "Brak danych":
+            text += f" 💰 {self.salary_display}"
+
+        return text
+
+    @property
     def upvotes(self):
         return self.votes.filter(vote=1).count()
 
