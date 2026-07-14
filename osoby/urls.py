@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (
     home,
     person_detail,
+    person_share_card,
     losowy_koles,
     parties_ranking,
     search,
@@ -29,6 +30,11 @@ urlpatterns = [
         "osoba/<int:person_id>/",
         person_detail,
         name="person_detail"
+    ),
+    path(
+        "osoba/<int:person_id>/grafika.png",
+        person_share_card,
+        name="person_share_card"
     ),
     path("losowy-koles/", losowy_koles, name="losowy_koles"),
     path("partie/", parties_ranking),

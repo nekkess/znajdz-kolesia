@@ -27,6 +27,7 @@ from django.db.models import (
 
 from .forms import RegisterForm, PersonSubmissionForm, PersonForm, LoginForm
 from .models import PersonSubmission, PersonSource
+from .share_card import generate_share_card
 from django.contrib.auth.models import User
 
 from django.contrib.auth import login
@@ -136,6 +137,15 @@ def home(request):
             "selected_parties": selected_parties,
         }
     )
+
+def person_share_card(request, person_id):
+
+    person = get_object_or_404(Person, id=person_id)
+
+    image_bytes = generate_share_card(person)
+
+    return HttpResponse(image_bytes, content_type="image/png")
+
 
 def person_detail(request, person_id):
 

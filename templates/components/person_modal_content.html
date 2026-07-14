@@ -150,6 +150,13 @@
                 📘 Facebook
             </a>
 
+            <a
+                class="btn btn-outline-danger btn-sm"
+                href="{% url 'person_share_card' person.id %}"
+                download="{{ person.first_name }}-{{ person.last_name }}-znajdz-kolesia.png">
+                📸 Pobierz grafikę
+            </a>
+
         </div>
 
         {% endwith %}
