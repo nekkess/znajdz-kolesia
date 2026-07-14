@@ -15,6 +15,20 @@ GRAY = (190, 190, 190)
 
 PHOTO_WIDTH = 480
 
+PARTY_FULL_NAMES = {
+    "PiS": "PRAWO I SPRAWIEDLIWOŚĆ",
+    "KO": "KOALICJA OBYWATELSKA",
+    "PSL": "POLSKIE STRONNICTWO LUDOWE",
+    "Lewica": "LEWICA",
+    "Konfederacja": "KONFEDERACJA",
+    "Polska 2050": "POLSKA 2050",
+    "Trzecia Droga": "TRZECIA DROGA",
+}
+
+
+def _full_party_name(party_name):
+    return PARTY_FULL_NAMES.get(party_name, party_name).upper()
+
 
 def _font(size):
     return ImageFont.truetype(str(FONT_PATH), size)
@@ -102,45 +116,68 @@ def generate_share_card(person):
     text_x = PHOTO_WIDTH + 60
     max_text_width = WIDTH - text_x - 50
 
-    draw.text((text_x, 55), "ZNAJDŹ", font=_font(42), fill=WHITE)
-    draw.text((text_x, 100), "KOLESIA", font=_font(42), fill=RED)
+    draw.text((text_x, 45), "ZNAJDŹ", font=_font(58), fill=WHITE)
+    draw.text((text_x, 105), "KOLESIA", font=_font(58), fill=RED)
 
-    name_font = _fit_font(draw, f"{person.first_name} {person.last_name}".upper(), max_text_width, 84)
-    y = 210
+    first_font = _fit_font(draw, person.first_name.upper(), max_text_width, 128, min_size=54)
+    last_font = _fit_font(draw, person.last_name.upper(), max_text_width, 128, min_size=54)
+    name_font = _font(min(first_font.size, last_font.size))
+
+    y = 230
     draw.text((text_x, y), person.first_name.upper(), font=name_font, fill=WHITE)
-    y += name_font.size + 6
+    y += name_font.size + 8
     draw.text((text_x, y), person.last_name.upper(), font=name_font, fill=WHITE)
-    y += name_font.size + 30
+    y += name_font.size + 45
 
     role_bits = [bit for bit in (person.position, person.organization) if bit]
     role_font = _font(30)
+    role_lines_left = 2
     for line in role_bits:
-        for wrapped in textwrap.wrap(line, width=28)[:2]:
+        for wrapped in textwrap.wrap(line, width=28)[:role_lines_left]:
             draw.text((text_x, y), wrapped, font=role_font, fill=GRAY)
             y += 38
-    y += 25
+            role_lines_left -= 1
+        if role_lines_left <= 0:
+            break
+    y += 20
 
-    if person.current_party:
-        badge_font = _font(28)
-        badge_text = person.current_party.upper()
+    membership = person.memberships.last()
+
+    if membership:
+        badge_text = _full_party_name(membership.party.name)
+        badge_font = _fit_font(draw, badge_text, max_text_width - 40, 30, min_size=18)
         badge_w = draw.textlength(badge_text, font=badge_font) + 40
+        badge_h = badge_font.size + 26
         draw.rounded_rectangle(
-            [text_x, y, text_x + badge_w, y + 52], radius=26, fill=RED
+            [text_x, y, text_x + badge_w, y + badge_h], radius=badge_h / 2, fill=RED
         )
-        draw.text((text_x + 20, y + 10), badge_text, font=badge_font, fill=WHITE)
-        y += 90
+        draw.text((text_x + 20, y + (badge_h - badge_font.size) / 2 - 4), badge_text, font=badge_font, fill=WHITE)
+        y += badge_h + 16
 
-    salary_label_font = _font(26)
-    draw.text((text_x, y), "WYNAGRODZENIE ROCZNE", font=salary_label_font, fill=GRAY)
-    y += 45
+        role_text = membership.position or membership.family_relation
+        if role_text:
+            role_desc_font = _font(24)
+            wrapped_lines = textwrap.wrap(role_text, width=48)[:1]
+            for wrapped in wrapped_lines:
+                draw.text((text_x, y), wrapped, font=role_desc_font, fill=GRAY)
+                y += 32
+
+    # Anchored to the bottom instead of following the dynamic flow above,
+    # so a long position/organization/party can never push the salary
+    # into the source line or the bottom bar.
+    salary_label_y = 785
+    salary_value_y = 830
+    source_y = HEIGHT - 115
+
+    salary_label_font = _font(32)
+    draw.text((text_x, salary_label_y), "WYNAGRODZENIE ROCZNE", font=salary_label_font, fill=GRAY)
 
     salary_text = person.salary_display.upper()
-    salary_font = _fit_font(draw, salary_text, max_text_width, 84, min_size=44)
-    _glow_text(card, (text_x, y), salary_text, salary_font, WHITE, glow_color=RED, blur=22)
-    y += salary_font.size + 40
+    salary_font = _fit_font(draw, salary_text, max_text_width, 80, min_size=46)
+    _glow_text(card, (text_x, salary_value_y), salary_text, salary_font, WHITE, glow_color=RED, blur=20)
 
     draw = ImageDraw.Draw(card)
-    draw.text((text_x, HEIGHT - 150), "ŹRÓDŁO: PUBLICZNIE DOSTĘPNE REJESTRY", font=_font(20), fill=GRAY)
+    draw.text((text_x, source_y), "ŹRÓDŁO: PUBLICZNIE DOSTĘPNE REJESTRY", font=_font(20), fill=GRAY)
 
     bar_h = 90
     draw.rectangle([0, HEIGHT - bar_h, WIDTH, HEIGHT], fill=RED)
