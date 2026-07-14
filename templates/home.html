@@ -737,7 +737,7 @@ window.addEventListener("load", function() {
         window.location.search
     );
 
-    if(params.get("q")) {
+    if(params.get("q") || params.get("sort") || params.getAll("party").length) {
 
         document
             .getElementById("wyszukiwarka")
