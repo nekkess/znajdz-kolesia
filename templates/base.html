@@ -657,6 +657,17 @@ function copyPersonLink(url, btn) {
     });
 }
 
+function shareToInstagram(text, btn) {
+    navigator.clipboard.writeText(text).then(function() {
+        const original = btn.innerHTML;
+        btn.innerHTML = "✔ Wklej w opisie na Instagramie";
+        setTimeout(function() {
+            btn.innerHTML = original;
+        }, 3000);
+        window.open("https://www.instagram.com/", "_blank", "noopener");
+    });
+}
+
 window.vote = function(personId, value) {
 
     fetch(`/vote/${personId}/${value}/`)

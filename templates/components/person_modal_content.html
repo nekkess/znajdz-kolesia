@@ -150,6 +150,13 @@
                 📘 Facebook
             </a>
 
+            <button
+                type="button"
+                class="btn btn-outline-secondary btn-sm"
+                onclick="shareToInstagram('{{ person.share_summary|escapejs }}', this)">
+                📷 Instagram
+            </button>
+
             <a
                 class="btn btn-outline-danger btn-sm"
                 href="{% url 'person_share_card' person.id %}"
