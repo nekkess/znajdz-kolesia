@@ -188,6 +188,20 @@ url("/static/images/sejm-sala-plenarna.jpeg");
             transform: translateY(-6px);
         }
 
+        .party-badge-overlay {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 10;
+            background: #e10600;
+            color: white;
+            font-weight: 700;
+            font-size: .8rem;
+            padding: 5px 12px;
+            border-radius: 999px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.25);
+        }
+
         .person-photo {
     width: 100%;
     height: 320px;
@@ -470,6 +484,58 @@ document.body.classList.add("home-page");
    class="btn btn-outline-dark">
     🔥 Najbardziej kontrowersyjni
 </a>
+
+<div class="dropdown">
+
+    <button
+        class="btn btn-outline-dark dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        data-bs-auto-close="outside"
+        aria-expanded="false">
+        🧭 Filtruj{% if selected_parties %} ({{ selected_parties|length }}){% endif %}
+    </button>
+
+    <form method="get" action="/" class="dropdown-menu dropdown-menu-end p-3" style="min-width: 240px;">
+
+        <input type="hidden" name="q" value="{{ query }}">
+        {% if sort %}<input type="hidden" name="sort" value="{{ sort }}">{% endif %}
+
+        <div class="fw-bold mb-2">
+            Partia
+        </div>
+
+        {% for party in all_parties %}
+
+        <div class="form-check">
+            <input
+                class="form-check-input"
+                type="checkbox"
+                name="party"
+                value="{{ party.name }}"
+                id="party-filter-{{ forloop.counter }}"
+                {% if party.name in selected_parties %}checked{% endif %}>
+            <label class="form-check-label" for="party-filter-{{ forloop.counter }}">
+                {{ party.name }}
+            </label>
+        </div>
+
+        {% endfor %}
+
+        <button type="submit" class="btn btn-sm btn-danger w-100 mt-3">
+            Zastosuj
+        </button>
+
+        {% if selected_parties %}
+        <a href="?q={{ query }}{% if sort %}&sort={{ sort }}{% endif %}#wyszukiwarka"
+           class="btn btn-sm btn-outline-secondary w-100 mt-2">
+            Wyczyść filtr
+        </a>
+        {% endif %}
+
+    </form>
+
+</div>
     </div>
 
 </div>
@@ -487,6 +553,12 @@ document.body.classList.add("home-page");
    class="text-decoration-none text-dark">
 
         <div class="card person-card">
+
+           {% if person.current_party_name %}
+           <div class="party-badge-overlay">
+               {{ person.current_party_name }}
+           </div>
+           {% endif %}
 
            {% if user.is_superuser %}
 

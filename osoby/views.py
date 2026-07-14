@@ -3,7 +3,7 @@ from .models import Person
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 
-from .models import Party
+from .models import Party, PartyMembership
 from django.db.models import Count
 
 from django.http import JsonResponse
@@ -20,7 +20,9 @@ from django.db.models import (
     Case,
     When,
     DecimalField,
-    ExpressionWrapper
+    ExpressionWrapper,
+    OuterRef,
+    Subquery,
 )
 
 from .forms import RegisterForm, PersonSubmissionForm, PersonForm, LoginForm
@@ -47,8 +49,15 @@ def is_superuser(user):
 def home(request):
     query = request.GET.get("q", "")
     sort = request.GET.get("sort")
+    selected_parties = request.GET.getlist("party")
 
-    people = Person.objects.all()
+    latest_membership_party = PartyMembership.objects.filter(
+        person=OuterRef("pk")
+    ).order_by("-start_year", "-id").values("party__name")[:1]
+
+    people = Person.objects.annotate(
+        current_party_name=Subquery(latest_membership_party)
+    )
 
     if query:
         people = people.filter(
@@ -57,6 +66,9 @@ def home(request):
             Q(position__icontains=query) |
             Q(organization__icontains=query)
         )
+
+    if selected_parties:
+        people = people.filter(current_party_name__in=selected_parties)
 
     if sort == "salary":
 
@@ -120,6 +132,8 @@ def home(request):
             "count": people.count(),
             "salary_sum": salary_sum,
             "sort": sort,
+            "all_parties": Party.objects.order_by("name"),
+            "selected_parties": selected_parties,
         }
     )
 
