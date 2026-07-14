@@ -38,6 +38,7 @@ from django.views.decorators.http import require_POST
 
 from django.shortcuts import redirect
 from django.contrib.auth import logout
+from django.utils import timezone
 
 
 def is_superuser(user):
@@ -427,6 +428,36 @@ def vote_person(request, person_id, vote):
     })
 
 
+def _save_party_membership(person, form):
+    party_name = form.cleaned_data.get("membership_party")
+    existing_membership = person.memberships.first()
+
+    if not party_name and not existing_membership:
+        return
+
+    membership = existing_membership or PartyMembership(person=person)
+
+    if party_name:
+        party, _ = Party.objects.get_or_create(
+            name__iexact=party_name,
+            defaults={"name": party_name},
+        )
+        membership.party = party
+    elif not membership.party_id:
+        return
+
+    membership.start_year = (
+        form.cleaned_data.get("membership_start_year")
+        or membership.start_year
+        or timezone.now().year
+    )
+    membership.end_year = form.cleaned_data.get("membership_end_year")
+    membership.position = form.cleaned_data.get("membership_position", "")
+    membership.family_relation = form.cleaned_data.get("membership_family_relation", "")
+    membership.description = form.cleaned_data.get("membership_description", "")
+    membership.save()
+
+
 @user_passes_test(is_superuser, login_url="/")
 def dodaj_kolesia(request):
 
@@ -444,6 +475,8 @@ def dodaj_kolesia(request):
                     title=form.cleaned_data.get("source_title") or source_url,
                     url=source_url,
                 )
+
+            _save_party_membership(person, form)
 
             messages.success(
                 request,
@@ -485,6 +518,8 @@ def edytuj_kolesia(request, person_id):
                         "title": form.cleaned_data.get("source_title") or source_url
                     },
                 )
+
+            _save_party_membership(person, form)
 
             messages.success(
                 request,

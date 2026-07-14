@@ -144,6 +144,10 @@ def generate_share_card(person):
 
     bar_h = 90
     draw.rectangle([0, HEIGHT - bar_h, WIDTH, HEIGHT], fill=RED)
+
+    site_font = _font(26)
+    draw.text((40, HEIGHT - bar_h + 30), "www.znajdźkolesia.pl", font=site_font, fill=WHITE)
+
     handle_font = _font(38)
     handle_text = "@ZNAJDZKOLESIA"
     handle_w = draw.textlength(handle_text, font=handle_font)

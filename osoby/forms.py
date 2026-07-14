@@ -73,8 +73,11 @@ class PersonSubmissionForm(BootstrapFormMixin, forms.ModelForm):
 
 class PersonForm(BootstrapFormMixin, forms.ModelForm):
     """Used by the superuser-only add/edit pages. Adds a single optional
-    source (title + URL) on top of the plain Person fields - handled in
-    the view since it isn't a Person field."""
+    source (title + URL) and the person's one party membership on top of
+    the plain Person fields - handled in the view since they aren't
+    Person fields. Editing assumes a single membership per person,
+    matching the single-source convention already used here; people
+    with several historical memberships still need Django admin."""
 
     source_title = forms.CharField(
         label="Nazwa źródła",
@@ -84,6 +87,37 @@ class PersonForm(BootstrapFormMixin, forms.ModelForm):
     source_url = forms.URLField(
         label="Link do źródła",
         required=False
+    )
+
+    membership_party = forms.CharField(
+        label="Partia (przynależność)",
+        required=False
+    )
+
+    membership_start_year = forms.IntegerField(
+        label="Rok rozpoczęcia (partia)",
+        required=False
+    )
+
+    membership_end_year = forms.IntegerField(
+        label="Rok zakończenia (partia, puste = nadal)",
+        required=False
+    )
+
+    membership_position = forms.CharField(
+        label="Funkcja w partii",
+        required=False
+    )
+
+    membership_family_relation = forms.CharField(
+        label="Powiązanie rodzinne (zamiast funkcji)",
+        required=False
+    )
+
+    membership_description = forms.CharField(
+        label="Opis przynależności partyjnej",
+        required=False,
+        widget=forms.Textarea(attrs={"rows": 3}),
     )
 
     class Meta:
@@ -96,6 +130,20 @@ class PersonForm(BootstrapFormMixin, forms.ModelForm):
         }
 
         labels = PERSON_LABELS
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            membership = self.instance.memberships.first()
+
+            if membership:
+                self.fields["membership_party"].initial = membership.party.name
+                self.fields["membership_start_year"].initial = membership.start_year
+                self.fields["membership_end_year"].initial = membership.end_year
+                self.fields["membership_position"].initial = membership.position
+                self.fields["membership_family_relation"].initial = membership.family_relation
+                self.fields["membership_description"].initial = membership.description
 
 
 class LoginForm(BootstrapFormMixin, AuthenticationForm):

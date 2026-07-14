@@ -79,6 +79,48 @@
 
 <hr class="my-4">
 
+<p class="text-muted small mb-2">
+    Przynależność partyjna
+    {% if is_edit %}(edytuje pierwszy zapisany wpis - osoby z kilkoma wpisami zarządzasz w panelu admina){% endif %}
+</p>
+
+<div class="form-floating mb-3">
+    {{ form.membership_party }}
+    <label for="{{ form.membership_party.id_for_label }}">{{ form.membership_party.label }}</label>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.membership_start_year }}
+            <label for="{{ form.membership_start_year.id_for_label }}">{{ form.membership_start_year.label }}</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.membership_end_year }}
+            <label for="{{ form.membership_end_year.id_for_label }}">{{ form.membership_end_year.label }}</label>
+        </div>
+    </div>
+</div>
+
+<div class="form-floating mb-3">
+    {{ form.membership_position }}
+    <label for="{{ form.membership_position.id_for_label }}">{{ form.membership_position.label }}</label>
+</div>
+
+<div class="form-floating mb-3">
+    {{ form.membership_family_relation }}
+    <label for="{{ form.membership_family_relation.id_for_label }}">{{ form.membership_family_relation.label }}</label>
+</div>
+
+<div class="form-floating mb-3">
+    {{ form.membership_description }}
+    <label for="{{ form.membership_description.id_for_label }}">{{ form.membership_description.label }}</label>
+</div>
+
+<hr class="my-4">
+
 <p class="text-muted small mb-2">Źródło{% if is_edit %} (opcjonalnie - dodaje kolejne, istniejące zarządzasz w panelu admina){% endif %}</p>
 
 <div class="row">
