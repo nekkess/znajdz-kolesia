@@ -123,13 +123,19 @@ class PersonForm(BootstrapFormMixin, forms.ModelForm):
     class Meta:
         model = Person
 
-        fields = PERSON_FIELDS
+        # salary_min/salary_max only exist on Person (not PersonSubmission),
+        # so they're added here instead of in the shared PERSON_FIELDS.
+        fields = PERSON_FIELDS + ("salary_min", "salary_max")
 
         widgets = {
             "description": forms.Textarea(attrs={"rows": 4}),
         }
 
-        labels = PERSON_LABELS
+        labels = {
+            **PERSON_LABELS,
+            "salary_min": "Szacunkowe wynagrodzenie - od",
+            "salary_max": "Szacunkowe wynagrodzenie - do",
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

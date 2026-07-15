@@ -64,6 +64,25 @@
     </div>
 </div>
 
+<p class="text-muted small mb-2">
+    Jeśli dokładne wynagrodzenie nie jest znane, podaj szacunkowy zakres zamiast pola powyżej
+</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.salary_min }}
+            <label for="{{ form.salary_min.id_for_label }}">{{ form.salary_min.label }}</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating mb-3">
+            {{ form.salary_max }}
+            <label for="{{ form.salary_max.id_for_label }}">{{ form.salary_max.label }}</label>
+        </div>
+    </div>
+</div>
+
 <div class="form-floating mb-3">
     {{ form.description }}
     <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
